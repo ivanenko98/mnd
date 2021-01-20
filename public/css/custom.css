@@ -1,0 +1,17 @@
+/* Add here all your CSS customizations */
+
+.testimonial.testimonial-light blockquote:before, .testimonial.testimonial-light blockquote:after, .testimonial.testimonial-light blockquote p {
+    color: #000;
+}
+
+.testimonial.testimonial-light .testimonial-author span, .testimonial.testimonial-light .testimonial-author strong {
+    color: #000;
+}
+
+.video-testimonial .content {
+    margin-top: 20px;
+}
+
+/*.video-testimonial .content > h4 {*/
+/*    color: #096cd0;*/
+/*}*/
