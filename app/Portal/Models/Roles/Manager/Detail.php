@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Portal\Models\Manager;
+namespace App\Portal\Models\Roles\Manager;
 
 use Illuminate\Database\Eloquent\Model;
 

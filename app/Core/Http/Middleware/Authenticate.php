@@ -2,17 +2,14 @@
 
 namespace App\Core\Http\Middleware;
 
-use App\Dwolla\Model\Source\DwollaUserStatus;
-use App\Users\Model\Source\Type;
+use App\Portal\Models\Source\Type;
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 
 class Authenticate extends Middleware
 {
-
-    protected $guards = [Type::ASSIGNOR, Type::REFEREE, Type::ASSIGNOR . '_api', Type::REFEREE . '_api', 'web'];
+    protected $guards = [Type::MANAGER, Type::MASTER, Type::ADMIN, Type::MASTER . '_api'];
 
     public function handle($request, Closure $next, ...$guards)
     {
@@ -20,15 +17,12 @@ class Authenticate extends Middleware
             $guards = $this->guards;
         }
         $this->authenticate($request, $guards);
-        if (Auth::user()->getDwollaStatus() == DwollaUserStatus::SUSPENDED) {
-            return Redirect::route('login', ['suspended' => true]);
-        }
-        if (Auth::user()->two_factor_enabled && !session("isVerified") && !$request->routeIs('verify')) {
-            return \redirect('verify');
-        }
+
+//        if (Auth::user()->two_factor_enabled && !session("isVerified") && !$request->routeIs('verify')) {
+//            return \redirect('verify');
+//        }
 
         return $next($request);
-
     }
 
     protected function redirectTo($request)

@@ -7,7 +7,9 @@ Route::group(['prefix' => 'portal'], function() {
         Route::post('/logout', 'LoginController@logout')->name('logout');
     });
 
-    Route::get('/', 'DashboardController@index')->name('dashboard');
+    Route::group(['middleware' => 'auth'], function() {
+        Route::get('/', 'DashboardController@index')->name('dashboard');
+    });
 });
 
 

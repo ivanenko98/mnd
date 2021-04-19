@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Portal\Models;
+namespace App\Portal\Models\Roles;
 
-use App\Portal\Models\Manager\Detail;
+use App\Portal\Models\Roles\Master\Detail;
+use App\Portal\Models\User;
 
-class Manager extends User
+class Master extends User
 {
     protected $table = 'users';
 

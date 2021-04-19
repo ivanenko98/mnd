@@ -40,11 +40,18 @@ return [
             'driver' => 'session',
             'provider' => 'manager',
         ],
-
-        'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
-            'hash' => false,
+        'master' => [
+            'driver' => 'session',
+            'provider' => 'master',
+        ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admin',
+        ],
+        'master_api' => [
+            'driver'   => 'token',
+            'provider' => 'master',
+            'hash'     => false,
         ],
     ],
 
@@ -68,7 +75,15 @@ return [
     'providers' => [
         'manager' => [
             'driver' => 'eloquent',
-            'model' => App\Portal\Models\Manager::class,
+            'model' => App\Portal\Models\Roles\Manager::class,
+        ],
+        'master' => [
+            'driver' => 'eloquent',
+            'model' => App\Portal\Models\Roles\Master::class,
+        ],
+        'admin' => [
+            'driver' => 'eloquent',
+            'model' => App\Portal\Models\Roles\Admin::class,
         ],
     ],
 
@@ -89,6 +104,18 @@ return [
 
     'passwords' => [
         'manager' => [
+            'provider' => 'manager',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'master' => [
+            'provider' => 'manager',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'admin' => [
             'provider' => 'manager',
             'table' => 'password_resets',
             'expire' => 60,
