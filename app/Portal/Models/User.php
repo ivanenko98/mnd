@@ -4,9 +4,13 @@ namespace App\Portal\Models;
 
 use App\Portal\Models\Role;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+    use HasRoles, HasApiTokens;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -36,6 +40,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Set permissions guard to API by default
+     * @var string
+     */
+    protected $guard_name = 'api';
 
     /**
      * Check is non verified.
@@ -82,10 +92,47 @@ class User extends Authenticatable
 //    }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @inheritdoc
      */
-    public function role()
+    public function getJWTIdentifier()
     {
-        return $this->belongsTo(Role::class);
+        return $this->getKey();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    /**
+     * Check if user has a permission
+     * @param String
+     * @return bool
+     */
+    public function hasPermission($permission): bool
+    {
+        foreach ($this->roles as $role) {
+            if (in_array($permission, $role->permissions->pluck('name')->toArray())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        foreach ($this->roles as $role) {
+            if ($role->isAdmin()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

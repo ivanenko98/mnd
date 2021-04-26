@@ -1,5 +1,7 @@
 <?php
 
+use App\Portal\Models\User;
+
 return [
 
     /*
@@ -14,8 +16,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'manager',
-        'passwords' => 'manager',
+        'guard' => 'web',
+        'passwords' => 'users',
     ],
 
     /*
@@ -36,22 +38,15 @@ return [
     */
 
     'guards' => [
-        'manager' => [
+        'web' => [
             'driver' => 'session',
-            'provider' => 'manager',
+            'provider' => 'users',
         ],
-        'master' => [
-            'driver' => 'session',
-            'provider' => 'master',
-        ],
-        'admin' => [
-            'driver' => 'session',
-            'provider' => 'admin',
-        ],
-        'master_api' => [
-            'driver'   => 'token',
-            'provider' => 'master',
-            'hash'     => false,
+
+        'api' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+            'hash' => false,
         ],
     ],
 
@@ -73,18 +68,15 @@ return [
     */
 
     'providers' => [
-        'manager' => [
+        'users' => [
             'driver' => 'eloquent',
-            'model' => App\Portal\Models\Roles\Manager::class,
+            'model' => User::class,
         ],
-        'master' => [
-            'driver' => 'eloquent',
-            'model' => App\Portal\Models\Roles\Master::class,
-        ],
-        'admin' => [
-            'driver' => 'eloquent',
-            'model' => App\Portal\Models\Roles\Admin::class,
-        ],
+
+        // 'users' => [
+        //     'driver' => 'database',
+        //     'table' => 'users',
+        // ],
     ],
 
     /*
@@ -103,20 +95,8 @@ return [
     */
 
     'passwords' => [
-        'manager' => [
-            'provider' => 'manager',
-            'table' => 'password_resets',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
-        'master' => [
-            'provider' => 'manager',
-            'table' => 'password_resets',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
-        'admin' => [
-            'provider' => 'manager',
+        'users' => [
+            'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
