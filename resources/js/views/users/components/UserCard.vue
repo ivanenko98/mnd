@@ -1,12 +1,12 @@
 <template>
-  <el-card v-if="user.name">
+  <el-card v-if="user.full_name">
     <div class="user-profile">
       <div class="user-avatar box-center">
         <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false" />
       </div>
       <div class="box-center">
         <div class="user-name text-center">
-          {{ user.name }}
+          {{ user.full_name }}
         </div>
         <div class="user-role text-center text-muted">
           {{ getRole() }}

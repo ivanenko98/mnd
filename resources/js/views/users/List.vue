@@ -25,7 +25,7 @@
 
       <el-table-column align="center" label="Name">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.full_name }}</span>
         </template>
       </el-table-column>
 
@@ -43,15 +43,15 @@
 
       <el-table-column align="center" label="Actions" width="350">
         <template slot-scope="scope">
-          <router-link v-if="!scope.row.roles.includes('admin')" :to="'/administrator/users/edit/'+scope.row.id">
+          <router-link v-if="!scope.row.roles.includes('admin')" :to="'/users/edit/'+scope.row.id">
             <el-button v-permission="['manage user']" type="primary" size="small" icon="el-icon-edit">
               Edit
             </el-button>
           </router-link>
-          <el-button v-if="!scope.row.roles.includes('admin')" v-permission="['manage permission']" type="warning" size="small" icon="el-icon-edit" @click="handleEditPermissions(scope.row.id);">
+          <el-button v-permission="['manage permission']" type="warning" size="small" icon="el-icon-edit" @click="handleEditPermissions(scope.row.id);">
             Permissions
           </el-button>
-          <el-button v-if="scope.row.roles.includes('visitor')" v-permission="['manage user']" type="danger" size="small" icon="el-icon-delete" @click="handleDelete(scope.row.id, scope.row.name);">
+          <el-button v-if="!scope.row.roles.includes('admin')" v-permission="['manage user']" type="danger" size="small" icon="el-icon-delete" @click="handleDelete(scope.row.id, scope.row.name);">
             Delete
           </el-button>
         </template>
@@ -159,8 +159,8 @@ export default {
         keyword: '',
         role: '',
       },
-      roles: ['admin', 'manager', 'editor', 'user', 'visitor'],
-      nonAdminRoles: ['editor', 'user', 'visitor'],
+      roles: ['admin', 'manager', 'master'],
+      nonAdminRoles: ['master'],
       newUser: {},
       dialogFormVisible: false,
       dialogPermissionVisible: false,

@@ -188,6 +188,11 @@ export default {
     'confirmPassword': 'Confirm password',
     'name': 'Name',
     'email': 'Email',
+    tabs: {
+        account: 'Account',
+        edit: 'Edit',
+        timeline: 'Timeline',
+    },
   },
   roles: {
     description: {
@@ -198,4 +203,13 @@ export default {
       visitor: 'Visitor. Have access to static pages, should not have any writable permission',
     },
   },
+    form: {
+      first_name: 'First Name',
+      last_name: 'Last Name',
+      email: 'Email',
+      date_of_birth: 'Date Of Birth',
+      pick_date: 'Pick a date',
+      about: 'About',
+      skills: 'Skills',
+    }
 };

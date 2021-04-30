@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use AdminsTableSeeder;
 use Illuminate\Database\Seeder;
+use ManagersTableSeeder;
 use RolesTableSeeder;
-use UserTableSeeder;
+use UsersTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,6 +18,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(RolesTableSeeder::class);
-        $this->call(UserTableSeeder::class);
+        $this->call(AdminsTableSeeder::class);
+        $this->call(ManagersTableSeeder::class);
+        $this->call(UsersTableSeeder::class);
     }
 }

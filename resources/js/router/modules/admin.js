@@ -13,20 +13,6 @@ const adminRoutes = {
     permissions: ['view menu administrator'],
   },
   children: [
-    /** User managements */
-    {
-      path: 'users/edit/:id(\\d+)',
-      component: () => import('@/views/users/UserProfile'),
-      name: 'UserProfile',
-      meta: { title: 'userProfile', noCache: true, permissions: ['manage user'] },
-      hidden: true,
-    },
-    {
-      path: 'users',
-      component: () => import('@/views/users/List'),
-      name: 'UserList',
-      meta: { title: 'users', icon: 'user', permissions: ['manage user'] },
-    },
     /** Role and permission */
     {
       path: 'roles',
