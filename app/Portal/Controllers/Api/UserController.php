@@ -39,14 +39,21 @@ class UserController extends BaseController
      */
     public function index(Request $request)
     {
+        $auth_user = Auth::user();
         $searchParams = $request->all();
         $userQuery = User::query();
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
         $role = Arr::get($searchParams, 'role', '');
         $keyword = Arr::get($searchParams, 'keyword', '');
 
+        if ($auth_user->hasRole('manager')) {
+            $role = 'master';
+        }
+
         if (!empty($role)) {
-            $userQuery->whereHas('roles', function($q) use ($role) { $q->where('name', $role); });
+            $userQuery->whereHas('roles', function($q) use ($role) {
+                $q->where('name', $role);
+            });
         }
 
         if (!empty($keyword)) {

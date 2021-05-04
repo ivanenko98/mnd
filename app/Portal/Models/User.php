@@ -65,7 +65,7 @@ class User extends Authenticatable
 //    public function isOnline()
 //    {
 //        $lastActivityTime = \Carbon\Carbon::now()->diffInMinutes($this->last_activity);
-//
+//z
 //        return $lastActivityTime < env('ONLINE_TIME', 5);
 //    }
 
@@ -134,5 +134,10 @@ class User extends Authenticatable
         }
 
         return false;
+    }
+
+    public function skills()
+    {
+        return $this->belongsToMany(Service::class);
     }
 }

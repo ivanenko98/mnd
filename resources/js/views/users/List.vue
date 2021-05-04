@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="query.keyword" :placeholder="$t('table.keyword')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="query.role" :placeholder="$t('table.role')" clearable style="width: 90px" class="filter-item" @change="handleFilter">
+      <el-select v-role="['admin']" v-model="query.role" :placeholder="$t('table.role')" clearable style="width: 90px" class="filter-item" @change="handleFilter">
         <el-option v-for="item in roles" :key="item" :label="item | uppercaseFirst" :value="item" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -11,9 +11,9 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
         {{ $t('table.add') }}
       </el-button>
-      <el-button v-waves :loading="downloading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        {{ $t('table.export') }}
-      </el-button>
+<!--      <el-button v-waves :loading="downloading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">-->
+<!--        {{ $t('table.export') }}-->
+<!--      </el-button>-->
     </div>
 
     <el-table v-loading="loading" :data="list" border fit highlight-current-row style="width: 100%">
@@ -130,6 +130,7 @@ import UserResource from '@/api/user';
 import Resource from '@/api/resource';
 import waves from '@/directive/waves'; // Waves directive
 import permission from '@/directive/permission'; // Permission directive
+import role from '@/directive/role';
 import checkPermission from '@/utils/permission'; // Permission checking
 
 const userResource = new UserResource();
@@ -138,7 +139,7 @@ const permissionResource = new Resource('permissions');
 export default {
   name: 'UserList',
   components: { Pagination },
-  directives: { waves, permission },
+  directives: { waves, permission, role},
   data() {
     var validateConfirmPassword = (rule, value, callback) => {
       if (value !== this.newUser.password) {
