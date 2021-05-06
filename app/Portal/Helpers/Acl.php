@@ -22,6 +22,12 @@ final class Acl
     const ROLE_MANAGER = 'manager';
     const ROLE_MASTER = 'master';
 
+    const PERMISSION_SKILLS_LIST = 'skills list';
+
+//    const PERMISSION_USERS_LIST = 'users list';
+//    const PERMISSION_USERS_EDIT = 'user edit';
+//    const PERMISSION_USERS_DELETE = 'user delete';
+
     const PERMISSION_VIEW_MENU_ELEMENT_UI = 'view menu element ui';
     const PERMISSION_VIEW_MENU_PERMISSION = 'view menu permission';
     const PERMISSION_VIEW_MENU_COMPONENTS = 'view menu components';

@@ -9,6 +9,7 @@
 
 namespace App\Portal\Controllers\Api;
 
+use App\Http\Resources\MasterResource;
 use App\Http\Resources\PermissionResource;
 use App\Http\Resources\UserResource;
 use App\Portal\Helpers\Acl;
@@ -57,7 +58,7 @@ class UserController extends BaseController
         }
 
         if (!empty($keyword)) {
-            $userQuery->where('name', 'LIKE', '%' . $keyword . '%');
+            $userQuery->whereRaw("concat(first_name, ' ', last_name) like '%$keyword%'");
             $userQuery->orWhere('email', 'LIKE', '%' . $keyword . '%');
         }
 
@@ -102,12 +103,16 @@ class UserController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  User $user
-     * @return UserResource|\Illuminate\Http\JsonResponse
+     * @param User $user
+     * @return MasterResource|UserResource
      */
     public function show(User $user)
     {
-        return new UserResource($user);
+        if ($user->hasRole('master')) {
+            return new MasterResource($user);
+        } else {
+            return new UserResource($user);
+        }
     }
 
     /**

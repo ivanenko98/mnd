@@ -3,6 +3,7 @@
 use App\Portal\Helpers\Acl;
 use App\Portal\Helpers\Faker;
 use App\Portal\Models\Role;
+use App\Portal\Models\Service;
 use App\Portal\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -69,6 +70,8 @@ class UsersTableSeeder extends Seeder
             "Wolfgang Ernst Pauli",
         ];
 
+        $skills = Service::where('parent_id', null)->get();
+
         foreach ($userList as $fullName) {
             $name = str_replace(' ', '.', $fullName);
             $roleName = Faker::randomInArray([
@@ -93,6 +96,10 @@ class UsersTableSeeder extends Seeder
 
             $role = Role::findByName($roleName);
             $user->syncRoles($role);
+
+            if ($roleName == 'master') {
+                $user->skills()->attach($skills->random(2)->pluck('id'));
+            }
         }
     }
 }

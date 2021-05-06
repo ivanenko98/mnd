@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class MasterResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -22,7 +22,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'about' => $this->about,
             'date_of_birth' => $this->date_of_birth,
-            'skills' => SkillResource::collection($this->skills),
+            'skills' => $this->skills->pluck('id'),
             'roles' => array_map(
                 function ($role) {
                     return $role['name'];

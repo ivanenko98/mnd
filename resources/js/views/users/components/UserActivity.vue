@@ -7,7 +7,7 @@
 
                     <el-button type="primary" icon="upload" style="position: absolute;bottom: 15px;margin-left: 40px;"
                                @click="imagecropperShow=true">
-                        Change Avatar
+                        {{$t('form.change_avatar')}}
                     </el-button>
 
                     <image-cropper
@@ -47,12 +47,12 @@
                 </el-form-item>
 
                 <el-form-item :label="$t('form.skills')">
-                    <el-drag-select v-model="value" style="width:500px;" multiple placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                    <el-drag-select v-model="user.skills" style="width:500px;" multiple :placeholder="$t('form.select_skills')">
+                        <el-option v-for="skill in skillsList" :key="skill.id" :label="skill.title" :value="skill.id" />
                     </el-drag-select>
                 </el-form-item>
 
-                <el-button type="primary" :disabled="user.role === 'admin'" @click="onSubmit">
+                <el-button type="primary" @click="onSubmit">
                     Update
                 </el-button>
             </el-tab-pane>
@@ -98,11 +98,15 @@
 <script>
     import Resource from '@/api/resource';
     const userResource = new Resource('users');
+    import SkillResource from "@/api/skill";
+    const skillResource = new SkillResource();
+
     import ImageCropper from '@/components/ImageCropper';
     import PanThumb from '@/components/PanThumb';
     import UserBio from '@/views/users/components/UserBio';
     import UserCard from '@/views/users/components/UserCard';
     import ElDragSelect from '@/components/DragSelect';
+    import UserResource from "@/api/user";
 
     export default {
         components: {ImageCropper, PanThumb, UserBio, UserCard, ElDragSelect},
@@ -118,6 +122,7 @@
                         about: '',
                         date_of_birth: '',
                         roles: [],
+                        skills: [],
                     };
                 },
             },
@@ -134,23 +139,9 @@
                 updating: false,
                 imagecropperShow: false,
                 imagecropperKey: 0,
-                value: ['Apple', 'Banana', 'Orange'],
-                options: [{
-                    value: 'Apple',
-                    label: 'Apple',
-                }, {
-                    value: 'Banana',
-                    label: 'Banana',
-                }, {
-                    value: 'Orange',
-                    label: 'Orange',
-                }, {
-                    value: 'Pear',
-                    label: 'Pear',
-                }, {
-                    value: 'Strawberry',
-                    label: 'Strawberry',
-                }],
+                value: [],
+                selectedSkills: [],
+                skillsList: [],
             };
         },
         methods: {
@@ -182,7 +173,18 @@
             closeCrop() {
                 this.imagecropperShow = false;
             },
+            async getListSkills() {
+                const { data } = await skillResource.list({});
+                this.skillsList = data;
+            },
+            setSelectedSkills() {
+                this.selectedSkills = this.user.skills
+            },
         },
+        created() {
+            this.getListSkills();
+            this.setSelectedSkills();
+        }
     };
 </script>
 

@@ -211,5 +211,7 @@ export default {
       pick_date: 'Pick a date',
       about: 'About',
       skills: 'Skills',
+      select_skills: 'Select Skills',
+      change_avatar: 'Change Avatar',
     }
 };
