@@ -24,9 +24,8 @@ final class Acl
 
     const PERMISSION_SKILLS_LIST = 'skills list';
 
-//    const PERMISSION_USERS_LIST = 'users list';
-//    const PERMISSION_USERS_EDIT = 'user edit';
-//    const PERMISSION_USERS_DELETE = 'user delete';
+    const PERMISSION_MASTERS_MANAGE = 'manage masters';
+    const PERMISSION_MANAGERS_MANAGE = 'manage managers';
 
     const PERMISSION_VIEW_MENU_ELEMENT_UI = 'view menu element ui';
     const PERMISSION_VIEW_MENU_PERMISSION = 'view menu permission';

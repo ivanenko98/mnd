@@ -16,6 +16,9 @@ use App\Portal\Helpers\Acl;
 use App\Portal\Models\Permission;
 use App\Portal\Models\Role;
 use App\Portal\Models\User;
+use App\Portal\User\Requests\CreateRequest;
+use App\Portal\User\Requests\UpdateRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Arr;
@@ -118,42 +121,25 @@ class UserController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param User    $user
+     * @param UpdateRequest $request
+     * @param User $user
      * @return UserResource|\Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateRequest $request, User $user)
     {
-        if ($user === null) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
-        if ($user->isAdmin()) {
-            return response()->json(['error' => 'Admin can not be modified'], 403);
+        $user->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'date_of_birth' => Carbon::parse($request->date_of_birth)->format('Y-m-d'),
+            'about' => $request->about,
+        ]);
+
+        if ($user->hasRole('master')) {
+            $user->skills()->sync($request->skills);
         }
 
-        $currentUser = Auth::user();
-        if (!$currentUser->isAdmin()
-            && $currentUser->id !== $user->id
-            && !$currentUser->hasPermission(Acl::PERMISSION_USER_MANAGE)
-        ) {
-            return response()->json(['error' => 'Permission denied'], 403);
-        }
-
-        $validator = Validator::make($request->all(), $this->getValidationRules(false));
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 403);
-        } else {
-            $email = $request->get('email');
-            $found = User::where('email', $email)->first();
-            if ($found && $found->id !== $user->id) {
-                return response()->json(['error' => 'Email has been taken'], 403);
-            }
-
-            $user->name = $request->get('name');
-            $user->email = $email;
-            $user->save();
-            return new UserResource($user);
-        }
+        return response()->json(['success' => true], 201);
     }
 
     /**

@@ -17,8 +17,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'role_id',
+        'first_name',
+        'last_name',
         'email',
+        'date_of_birth',
+        'about',
         'password',
     ];
 
@@ -128,6 +131,7 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         foreach ($this->roles as $role) {
+            dd($role->isAdmin());
             if ($role->isAdmin()) {
                 return true;
             }

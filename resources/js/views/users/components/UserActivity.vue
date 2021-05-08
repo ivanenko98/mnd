@@ -23,30 +23,30 @@
                 </el-form-item>
                 <el-form-item>
                     <el-col :span="11">
-                        <el-form-item :label="$t('form.first_name')">
+                        <el-form-item :label="$t('form.first_name')" :error="this.errors.first_name[0]">
                             <el-input v-model="user.first_name"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
-                        <el-form-item :label="$t('form.last_name')">
+                        <el-form-item :label="$t('form.last_name')" :error="this.errors.last_name[0]">
                             <el-input v-model="user.last_name"/>
                         </el-form-item>
                     </el-col>
                 </el-form-item>
 
                 <el-form-item :label="$t('form.email')">
-                    <el-input v-model="user.email"/>
+                    <el-input v-model="user.email" :error="this.errors.email[0]"/>
                 </el-form-item>
 
                 <el-form-item :label="$t('form.about')">
-                    <el-input v-model="user.about" type="textarea"/>
+                    <el-input v-model="user.about" type="textarea" :error="this.errors.about[0]"/>
                 </el-form-item>
 
-                <el-form-item :label="$t('form.date_of_birth')">
-                    <el-date-picker v-model="user.date_of_birth" :placeholder="$t('form.pick_date')" type="date"/>
+                <el-form-item :label="$t('form.date_of_birth')" :error="this.errors.date_of_birth[0]">
+                    <el-date-picker v-model="user.date_of_birth" :placeholder="$t('form.pick_date')" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd"/>
                 </el-form-item>
 
-                <el-form-item :label="$t('form.skills')">
+                <el-form-item :label="$t('form.skills')" :error="this.errors.skills[0]">
                     <el-drag-select v-model="user.skills" style="width:500px;" multiple :placeholder="$t('form.select_skills')">
                         <el-option v-for="skill in skillsList" :key="skill.id" :label="skill.title" :value="skill.id" />
                     </el-drag-select>
@@ -139,9 +139,17 @@
                 updating: false,
                 imagecropperShow: false,
                 imagecropperKey: 0,
-                value: [],
                 selectedSkills: [],
                 skillsList: [],
+                defaultErrorsObject: {
+                    first_name: '',
+                    last_name: '',
+                    email: '',
+                    about: '',
+                    date_of_birth: '',
+                    skills: '',
+                },
+                errors: {}
             };
         },
         methods: {
@@ -154,6 +162,8 @@
                     .update(this.user.id, this.user)
                     .then(response => {
                         this.updating = false;
+                        this.setDefaultErrors();
+
                         this.$message({
                             message: 'User information has been updated successfully',
                             type: 'success',
@@ -161,7 +171,12 @@
                         });
                     })
                     .catch(error => {
-                        console.log(error);
+
+
+                        this.errors = error.response.data.data;
+
+                        console.log(error.response.data.data);
+
                         this.updating = false;
                     });
             },
@@ -180,8 +195,12 @@
             setSelectedSkills() {
                 this.selectedSkills = this.user.skills
             },
+            setDefaultErrors() {
+                this.errors = this.defaultErrorsObject
+            },
         },
         created() {
+            this.setDefaultErrors();
             this.getListSkills();
             this.setSelectedSkills();
         }

@@ -148,5 +148,5 @@ return [
     */
 
     'attributes' => [],
-
+    'validation_message' => 'The given data was invalid.',
 ];
