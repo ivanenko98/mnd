@@ -35,6 +35,10 @@ Route::namespace('Api')->group(function () {
             Route::get('/', 'SkillController@index')->middleware('permission:' . Acl::PERMISSION_SKILLS_LIST);
         });
 
+        // Users
+        Route::apiResource('users', 'UserController')->middleware('permission:' . Acl::PERMISSION_USER_MANAGE);
+        Route::post('users/{user}/upload-avatar', 'UserController@uploadAvatar');
+
         // Api resource routes
         Route::apiResource('roles', 'RoleController')->middleware('permission:' . Acl::PERMISSION_PERMISSION_MANAGE);
         Route::apiResource('users', 'UserController')->middleware('permission:' . Acl::PERMISSION_USER_MANAGE);

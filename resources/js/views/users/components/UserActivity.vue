@@ -15,7 +15,8 @@
                         :key="imagecropperKey"
                         :width="300"
                         :height="300"
-                        url="https://httpbin.org/post"
+                        :maxSize="5000"
+                        :url="this.imageUploadUrl"
                         lang-type="en"
                         @close="closeCrop"
                         @crop-upload-success="cropSuccess"
@@ -149,7 +150,8 @@
                     date_of_birth: '',
                     skills: '',
                 },
-                errors: {}
+                errors: {},
+                imageUploadUrl: ''
             };
         },
         methods: {
@@ -183,7 +185,7 @@
             cropSuccess(resData) {
                 this.imagecropperShow = false;
                 this.imagecropperKey = this.imagecropperKey + 1;
-                this.image = resData.files.avatar;
+                this.user.avatar = resData.data;
             },
             closeCrop() {
                 this.imagecropperShow = false;
@@ -198,6 +200,14 @@
             setDefaultErrors() {
                 this.errors = this.defaultErrorsObject
             },
+            setImageUploadUrl(id) {
+                this.imageUploadUrl = '/users/'+id+'/upload-avatar'
+            },
+        },
+        watch: {
+            user: function(newOne){
+                this.setImageUploadUrl(newOne.id);
+            }
         },
         created() {
             this.setDefaultErrors();

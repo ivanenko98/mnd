@@ -35,7 +35,7 @@ class MasterResource extends JsonResource
                 },
                 $this->getAllPermissions()->toArray()
             ),
-            'avatar' => 'https://i.pravatar.cc',
+            'avatar' => $this->avatar,
         ];
     }
 }

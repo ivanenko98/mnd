@@ -16,7 +16,11 @@ class UserRequest extends BaseRequest
      */
     public function authorize()
     {
-        $user = User::findOrFail(request()->id);
+        $user = request()->user;
+
+        if ($user == null)
+            $user = User::findOrFail(request()->id);
+
         $currentUser = Auth::user();
 
         if (

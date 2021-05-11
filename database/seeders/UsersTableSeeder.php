@@ -90,6 +90,7 @@ class UsersTableSeeder extends Seeder
                 'about' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio doloremque dolorum eligendi quod
                   suscipit. Ab accusamus asperiores autem hic iusto magni nihil non pariatur perspiciatis possimus
                   praesentium qui, suscipit, velit!',
+                'avatar' => 'https://i.pravatar.cc',
                 'email' => strtolower($name) . '@gmail.com',
                 'password' => Hash::make('123456'),
             ]);

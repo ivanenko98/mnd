@@ -18,6 +18,7 @@ class ManagersTableSeeder extends Seeder
             'first_name' => 'Manager',
             'last_name' => 'Oleh',
             'email' => 'manager@gmail.com',
+            'avatar' => 'https://i.pravatar.cc',
             'password' => Hash::make('123456'),
         ]);
 

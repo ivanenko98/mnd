@@ -44,14 +44,11 @@
       <el-table-column align="center" label="Actions" width="350">
         <template slot-scope="scope">
           <router-link v-if="!scope.row.roles.includes('admin')" :to="'/users/edit/'+scope.row.id">
-            <el-button v-permission="['manage user']" type="primary" size="small" icon="el-icon-edit">
+            <el-button type="primary" size="small" icon="el-icon-edit">
               Edit
             </el-button>
           </router-link>
-          <el-button v-permission="['manage permission']" type="warning" size="small" icon="el-icon-edit" @click="handleEditPermissions(scope.row.id);">
-            Permissions
-          </el-button>
-          <el-button v-if="!scope.row.roles.includes('admin')" v-permission="['manage user']" type="danger" size="small" icon="el-icon-delete" @click="handleDelete(scope.row.id, scope.row.name);">
+          <el-button v-if="!scope.row.roles.includes('admin')" type="danger" size="small" icon="el-icon-delete" @click="handleDelete(scope.row.id, scope.row.name);">
             Delete
           </el-button>
         </template>
@@ -98,16 +95,19 @@
               <el-option v-for="item in nonAdminRoles" :key="item" :label="item | uppercaseFirst" :value="item" />
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('user.name')" prop="name">
-            <el-input v-model="newUser.name" />
-          </el-form-item>
-          <el-form-item :label="$t('user.email')" prop="email">
-            <el-input v-model="newUser.email" />
-          </el-form-item>
-          <el-form-item :label="$t('user.password')" prop="password">
+            <el-form-item :label="$t('form.first_name')" :error="this.errors.first_name[0]" required>
+                <el-input v-model="newUser.first_name"/>
+            </el-form-item>
+            <el-form-item :label="$t('form.last_name')" :error="this.errors.last_name[0]" required>
+                <el-input v-model="newUser.last_name"/>
+            </el-form-item>
+            <el-form-item :label="$t('form.email')" :error="this.errors.email[0]" required>
+                <el-input v-model="newUser.email"/>
+            </el-form-item>
+          <el-form-item :label="$t('user.password')" :error="this.errors.password[0]" prop="password">
             <el-input v-model="newUser.password" show-password />
           </el-form-item>
-          <el-form-item :label="$t('user.confirmPassword')" prop="confirmPassword">
+          <el-form-item :label="$t('user.confirmPassword')" prop="confirmPassword" required>
             <el-input v-model="newUser.confirmPassword" show-password />
           </el-form-item>
         </el-form>
@@ -190,6 +190,13 @@ export default {
       permissions: [],
       menuPermissions: [],
       otherPermissions: [],
+        defaultErrorsObject: {
+            first_name: '',
+            last_name: '',
+            email: '',
+            password: '',
+        },
+        errors: {},
     };
   },
   computed: {
@@ -257,6 +264,7 @@ export default {
   },
   created() {
     this.resetNewUser();
+    this.setDefaultErrors();
     this.getList();
     if (checkPermission(['manage permission'])) {
       this.getPermissions();
@@ -347,10 +355,12 @@ export default {
                 duration: 5 * 1000,
               });
               this.resetNewUser();
+              this.setDefaultErrors();
               this.dialogFormVisible = false;
               this.handleFilter();
             })
             .catch(error => {
+                this.errors = error.response.data.data;
               console.log(error);
             })
             .finally(() => {
@@ -364,11 +374,12 @@ export default {
     },
     resetNewUser() {
       this.newUser = {
-        name: '',
+        first_name: '',
+        last_name: '',
         email: '',
         password: '',
         confirmPassword: '',
-        role: 'user',
+        role: 'master',
       };
     },
     handleDownload() {
@@ -430,6 +441,9 @@ export default {
         this.dialogPermissionVisible = false;
       });
     },
+      setDefaultErrors() {
+          this.errors = this.defaultErrorsObject
+      },
   },
 };
 </script>

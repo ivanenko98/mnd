@@ -149,4 +149,5 @@ return [
 
     'attributes' => [],
     'validation_message' => 'The given data was invalid.',
+    'image_format' => 'The given image was invalid.',
 ];
