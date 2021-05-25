@@ -176,20 +176,4 @@ class UserController extends BaseController
         $response = $this->formatResponse('success', null);
         return response($response, 204);
     }
-
-    /**
-     * @param bool $isNew
-     * @return array
-     */
-    private function getValidationRules($isNew = true)
-    {
-        return [
-            'name' => 'required',
-            'email' => $isNew ? 'required|email|unique:users' : 'required|email',
-            'roles' => [
-                'required',
-                'array'
-            ],
-        ];
-    }
 }

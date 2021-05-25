@@ -39,6 +39,9 @@ Route::namespace('Api')->group(function () {
         Route::apiResource('users', 'UserController')->middleware('permission:' . Acl::PERMISSION_USER_MANAGE);
         Route::post('users/{user}/upload-avatar', 'UserController@uploadAvatar');
 
+        // Orders
+        Route::apiResource('orders', 'OrderController')->middleware('permission:' . Acl::PERMISSION_ORDERS_MANAGE);
+
         // Api resource routes
         Route::apiResource('roles', 'RoleController')->middleware('permission:' . Acl::PERMISSION_PERMISSION_MANAGE);
         Route::apiResource('permissions', 'PermissionController')->middleware('permission:' . Acl::PERMISSION_PERMISSION_MANAGE);
@@ -71,21 +74,21 @@ Route::get('/table/list', function () {
     return response()->json(new JsonResponse(['items' => $data]));
 });
 
-Route::get('/orders', function () {
-    $rowsNumber = 8;
-    $data = [];
-    for ($rowIndex = 0; $rowIndex < $rowsNumber; $rowIndex++) {
-        $row = [
-            'order_no' => 'LARAVUE' . mt_rand(1000000, 9999999),
-            'price' => mt_rand(10000, 999999),
-            'status' => Faker::randomInArray(['success', 'pending']),
-        ];
-
-        $data[] = $row;
-    }
-
-    return response()->json(new JsonResponse(['items' => $data]));
-});
+//Route::get('/orders', function () {
+//    $rowsNumber = 8;
+//    $data = [];
+//    for ($rowIndex = 0; $rowIndex < $rowsNumber; $rowIndex++) {
+//        $row = [
+//            'order_no' => 'LARAVUE' . mt_rand(1000000, 9999999),
+//            'price' => mt_rand(10000, 999999),
+//            'status' => Faker::randomInArray(['success', 'pending']),
+//        ];
+//
+//        $data[] = $row;
+//    }
+//
+//    return response()->json(new JsonResponse(['items' => $data]));
+//});
 
 Route::get('/articles', function () {
     $rowsNumber = 10;

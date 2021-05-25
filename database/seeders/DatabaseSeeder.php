@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use AdminsTableSeeder;
+use CitiesTableSeeder;
 use Illuminate\Database\Seeder;
 use ManagersTableSeeder;
+use OrdersTableSeeder;
 use RolesTableSeeder;
 use ServicesTableSeeder;
 use UsersTableSeeder;
@@ -23,5 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminsTableSeeder::class);
         $this->call(ManagersTableSeeder::class);
         $this->call(UsersTableSeeder::class);
+        $this->call(CitiesTableSeeder::class);
+        $this->call(OrdersTableSeeder::class);
     }
 }

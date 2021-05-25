@@ -19,6 +19,7 @@ import chartsRoutes from './modules/charts';
 import tableRoutes from './modules/table';
 import adminRoutes from './modules/admin';
 import usersRoutes from './modules/users';
+import ordersRoutes from './modules/orders';
 import nestedRoutes from './modules/nested';
 import errorRoutes from './modules/error';
 import excelRoutes from './modules/excel';
@@ -137,12 +138,13 @@ export const constantRoutes = [
 
 export const asyncRoutes = [
     usersRoutes,
+    ordersRoutes,
     permissionRoutes,
-  componentRoutes,
-  chartsRoutes,
-  nestedRoutes,
-  tableRoutes,
-  adminRoutes,
+    componentRoutes,
+    chartsRoutes,
+    nestedRoutes,
+    tableRoutes,
+    adminRoutes,
   {
     path: '/theme',
     component: Layout,
