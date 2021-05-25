@@ -185,7 +185,7 @@ export default {
   user: {
     'role': 'Role',
     'password': 'Password',
-    'confirmPassword': 'Confirm password',
+    'password_confirmation': 'Confirm password',
     'name': 'Name',
     'email': 'Email',
     tabs: {

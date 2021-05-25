@@ -107,8 +107,8 @@
           <el-form-item :label="$t('user.password')" :error="this.errors.password[0]" prop="password">
             <el-input v-model="newUser.password" show-password />
           </el-form-item>
-          <el-form-item :label="$t('user.confirmPassword')" prop="confirmPassword" required>
-            <el-input v-model="newUser.confirmPassword" show-password />
+          <el-form-item :label="$t('user.password_confirmation')" prop="password_confirmation" required>
+            <el-input v-model="newUser.password_confirmation" show-password />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -180,7 +180,7 @@ export default {
           { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] },
         ],
         password: [{ required: true, message: 'Password is required', trigger: 'blur' }],
-        confirmPassword: [{ validator: validateConfirmPassword, trigger: 'blur' }],
+        password_confirmation: [{ validator: validateConfirmPassword, trigger: 'blur' }],
       },
       permissionProps: {
         children: 'children',
@@ -378,7 +378,7 @@ export default {
         last_name: '',
         email: '',
         password: '',
-        confirmPassword: '',
+        password_confirmation: '',
         role: 'master',
       };
     },
