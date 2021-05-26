@@ -71,6 +71,7 @@ export default {
     users: 'Користувачі',
     orders: 'Замовлення',
     userProfile: 'Профиль пользователя',
+    edit_order: 'Редагування Замовлення',
   },
   navbar: {
     logOut: 'Выход',
@@ -151,7 +152,13 @@ export default {
       deleted: 'Видалено',
       delete_cancelled: 'Видалення скасовано',
       user_deleting_msg: 'Це назавжди видалить користувача {username}. Продовжити?',
-      warning: 'Увага'
+      warning: 'Увага',
+    create_new_order: 'Створити нове замовлення',
+    phone: 'Телефон',
+    master: 'Мастер',
+    city: 'Місто',
+    total_cost: 'Сума замовлення',
+    created_at: 'Дата створення',
   },
   errorLog: {
     tips: 'Пожалуйста, нажмите на иконку "бага" в правом верхнем углу',

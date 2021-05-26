@@ -13,19 +13,19 @@
         </div>
 
         <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-            <el-table-column align="center" label="ID" width="80">
+            <el-table-column align="center" :label="$t('table.id')" width="80">
                 <template slot-scope="scope">
                     <span>{{ scope.row.id }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column width="120px" align="center" label="Phone">
+            <el-table-column width="120px" align="center" :label="$t('table.phone')">
                 <template slot-scope="scope">
                     <span>{{ scope.row.phone_number }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column width="120px" align="center" label="Master">
+            <el-table-column width="120px" align="center" :label="$t('table.master')">
                 <template slot-scope="scope">
                     <router-link :to="'/users/edit/'+scope.row.master.id" class="link-type">
                         <span>{{ scope.row.master.first_name+' '+scope.row.master.last_name }}</span>
@@ -33,19 +33,19 @@
                 </template>
             </el-table-column>
 
-            <el-table-column width="120px" align="center" label="Master">
+            <el-table-column width="120px" align="center" :label="$t('table.city')">
                 <template slot-scope="scope">
                     <span>{{ scope.row.city.title }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column width="120px" align="center" label="Total Cost">
+            <el-table-column width="120px" align="center" :label="$t('table.total_cost')">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.total_cost }}</span>
+                    <span>₴{{ scope.row.total_cost }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column class-name="status-col" label="Status" width="170">
+            <el-table-column class-name="status-col" :label="$t('table.status')" width="170">
                 <template slot-scope="{row}">
                     <el-tag :type="row.status | statusFilter">
                         {{ row.status }}
@@ -53,13 +53,13 @@
                 </template>
             </el-table-column>
 
-            <el-table-column width="180px" align="center" label="Created At">
+            <el-table-column width="180px" align="center" :label="$t('table.created_at')">
                 <template slot-scope="scope">
                     <span>{{ scope.row.created_at | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column align="center" label="Actions" width="120">
+            <el-table-column align="center" :label="$t('table.actions')" width="120">
                 <template slot-scope="scope">
                     <router-link :to="'/orders/edit/'+scope.row.id">
                         <el-button type="primary" size="small" icon="el-icon-edit">
@@ -73,7 +73,7 @@
         <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit"
                     @pagination="getList"/>
 
-        <el-dialog :title="'Create new Order'" :visible.sync="dialogFormVisible">
+        <el-dialog :title="$t('table.create_new_order')" :visible.sync="dialogFormVisible">
             <div v-loading="orderCreating" class="form-container">
                 <el-form ref="orderForm" :rules="rules" :model="newOrder" label-position="left" label-width="150px" style="max-width: 500px;">
 <!--                    <el-form-item :label="$t('user.role')" prop="role">-->
