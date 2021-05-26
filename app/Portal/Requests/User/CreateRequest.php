@@ -39,7 +39,7 @@ class CreateRequest extends BaseRequest
         return [
             'first_name' => 'required|string|min:2|max:255',
             'last_name' => 'required|string|min:2|max:255',
-            'email' => 'required|unique:users',
+            'email' => 'required|email|unique:users',
             'password' => 'required|confirmed'
         ];
     }

@@ -17,39 +17,39 @@
     </div>
 
     <el-table v-loading="loading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column align="center" label="ID" width="80">
+      <el-table-column align="center" :label="$t('table.id')" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.index }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="Name">
+      <el-table-column align="center" :label="$t('table.name')">
         <template slot-scope="scope">
           <span>{{ scope.row.full_name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="Email">
+      <el-table-column align="center" :label="$t('table.email')">
         <template slot-scope="scope">
           <span>{{ scope.row.email }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="Role" width="120">
+      <el-table-column align="center" :label="$t('table.role')" width="120">
         <template slot-scope="scope">
           <span>{{ scope.row.roles.join(', ') }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="Actions" width="350">
+      <el-table-column align="center" :label="$t('table.actions')" width="350">
         <template slot-scope="scope">
           <router-link v-if="!scope.row.roles.includes('admin')" :to="'/users/edit/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
-              Edit
+              {{$t('table.edit')}}
             </el-button>
           </router-link>
-          <el-button v-if="!scope.row.roles.includes('admin')" type="danger" size="small" icon="el-icon-delete" @click="handleDelete(scope.row.id, scope.row.name);">
-            Delete
+          <el-button v-if="!scope.row.roles.includes('admin')" type="danger" size="small" icon="el-icon-delete" @click="handleDelete(scope.row.id, scope.row.full_name);">
+            {{$t('table.delete')}}
           </el-button>
         </template>
       </el-table-column>
@@ -87,9 +87,9 @@
       </div>
     </el-dialog>
 
-    <el-dialog :title="'Create new user'" :visible.sync="dialogFormVisible">
+    <el-dialog :title="$t('user.create_title')" :visible.sync="dialogFormVisible">
       <div v-loading="userCreating" class="form-container">
-        <el-form ref="userForm" :rules="rules" :model="newUser" label-position="left" label-width="150px" style="max-width: 500px;">
+        <el-form ref="userForm" :model="newUser" label-position="left" label-width="150px" style="max-width: 500px;">
           <el-form-item :label="$t('user.role')" prop="role">
             <el-select v-model="newUser.role" class="filter-item" placeholder="Please select role">
               <el-option v-for="item in nonAdminRoles" :key="item" :label="item | uppercaseFirst" :value="item" />
@@ -104,10 +104,10 @@
             <el-form-item :label="$t('form.email')" :error="this.errors.email[0]" required>
                 <el-input v-model="newUser.email"/>
             </el-form-item>
-          <el-form-item :label="$t('user.password')" :error="this.errors.password[0]" prop="password">
+          <el-form-item :label="$t('user.password')" :error="this.errors.password[0]">
             <el-input v-model="newUser.password" show-password />
           </el-form-item>
-          <el-form-item :label="$t('user.password_confirmation')" prop="password_confirmation" required>
+          <el-form-item :label="$t('user.confirmPassword')" required>
             <el-input v-model="newUser.password_confirmation" show-password />
           </el-form-item>
         </el-form>
@@ -171,16 +171,6 @@ export default {
         name: '',
         permissions: [],
         rolePermissions: [],
-      },
-      rules: {
-        // role: [{ required: true, message: 'Role is required', trigger: 'change' }],
-        // name: [{ required: true, message: 'Name is required', trigger: 'blur' }],
-        // email: [
-        //   { required: true, message: 'Email is required', trigger: 'blur' },
-        //   { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] },
-        // ],
-        password: [{ required: true, message: 'Password is required', trigger: 'blur' }],
-        password_confirmation: [{ validator: validateConfirmPassword, trigger: 'blur' }],
       },
       permissionProps: {
         children: 'children',
@@ -303,15 +293,15 @@ export default {
       });
     },
     handleDelete(id, name) {
-      this.$confirm('This will permanently delete user ' + name + '. Continue?', 'Warning', {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
+      this.$confirm(this.$t('table.user_deleting_msg', {username: name}), this.$t('table.warning'), {
+        confirmButtonText: this.$t('table.confirm'),
+        cancelButtonText: this.$t('table.cancel'),
         type: 'warning',
       }).then(() => {
         userResource.destroy(id).then(response => {
           this.$message({
             type: 'success',
-            message: 'Delete completed',
+            message: this.$t('table.deleted'),
           });
           this.handleFilter();
         }).catch(error => {
@@ -320,7 +310,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: 'Delete canceled',
+          message: this.$t('table.delete_cancelled'),
         });
       });
     },
@@ -360,8 +350,7 @@ export default {
               this.handleFilter();
             })
             .catch(error => {
-                this.errors = error.response.data.data;
-              console.log(error);
+                this.setErrors(error.response.data.data);
             })
             .finally(() => {
               this.userCreating = false;
@@ -442,7 +431,20 @@ export default {
       });
     },
       setDefaultErrors() {
-          this.errors = this.defaultErrorsObject
+          this.errors = {
+              first_name: '',
+              last_name: '',
+              email: '',
+              password: '',
+          };
+      },
+      setErrors(errors) {
+
+        this.setDefaultErrors();
+
+          for (let key in errors) {
+              this.errors[key] = errors[key];
+          }
       },
   },
 };

@@ -53,7 +53,7 @@ export default {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false });
     },
-  },
+  }
 };
 </script>
 

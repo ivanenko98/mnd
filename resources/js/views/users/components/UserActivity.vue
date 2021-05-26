@@ -54,7 +54,7 @@
                 </el-form-item>
 
                 <el-button type="primary" @click="onSubmit">
-                    Update
+                    {{$t('form.update')}}
                 </el-button>
             </el-tab-pane>
             <el-tab-pane :label="$t('user.tabs.account')" name="second">

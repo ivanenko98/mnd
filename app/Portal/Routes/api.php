@@ -38,6 +38,7 @@ Route::namespace('Api')->group(function () {
         // Users
         Route::apiResource('users', 'UserController')->middleware('permission:' . Acl::PERMISSION_USER_MANAGE);
         Route::post('users/{user}/upload-avatar', 'UserController@uploadAvatar');
+        Route::post('users/set-lang', 'UserController@setLanguage');
 
         // Orders
         Route::apiResource('orders', 'OrderController')->middleware('permission:' . Acl::PERMISSION_ORDERS_MANAGE);

@@ -144,4 +144,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Service::class);
     }
+
+    public function settings()
+    {
+        return $this->belongsToMany(Setting::class, 'setting_user')->withPivot(['value']);
+    }
 }

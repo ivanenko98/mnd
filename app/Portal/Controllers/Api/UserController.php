@@ -16,6 +16,7 @@ use App\Http\Resources\UserResource;
 use App\Portal\Helpers\Acl;
 use App\Portal\Models\Permission;
 use App\Portal\Models\Role;
+use App\Portal\Models\Setting;
 use App\Portal\Models\User;
 use App\Portal\User\Requests\CreateRequest;
 use App\Portal\User\Requests\UpdateRequest;
@@ -26,6 +27,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Validator;
@@ -175,5 +177,19 @@ class UserController extends BaseController
 
         $response = $this->formatResponse('success', null);
         return response($response, 204);
+    }
+
+
+    public function setLanguage(Request $request)
+    {
+        $authUser = Auth::user();
+
+        $langSetting = Setting::title('language')->first();
+        $authUser->settings()->syncWithoutDetaching([$langSetting->id => ['value' => $request->lang]]);
+
+        Cache::forget('language');
+
+        $response = $this->formatResponse('success', null);
+        return response($response, 200);
     }
 }

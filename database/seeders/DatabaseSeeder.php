@@ -9,6 +9,7 @@ use ManagersTableSeeder;
 use OrdersTableSeeder;
 use RolesTableSeeder;
 use ServicesTableSeeder;
+use SettingsTableSeeder;
 use UsersTableSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -27,5 +28,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersTableSeeder::class);
         $this->call(CitiesTableSeeder::class);
         $this->call(OrdersTableSeeder::class);
+        $this->call(SettingsTableSeeder::class);
     }
 }

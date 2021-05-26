@@ -6,6 +6,14 @@ class UserResource extends Resource {
     super('users');
   }
 
+    setLanguage(lang) {
+        return request({
+            url: '/' + this.uri + '/set-lang',
+            method: 'post',
+            data: {lang: lang},
+        });
+    }
+
   permissions(id) {
     return request({
       url: '/' + this.uri + '/' + id + '/permissions',

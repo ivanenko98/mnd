@@ -35,7 +35,7 @@ class MasterResource extends JsonResource
                 },
                 $this->getAllPermissions()->toArray()
             ),
-            'avatar' => $this->avatar,
+            'avatar' => $this->avatar !== null ? $this->avatar : '/public/img/avatars/avatar.png',
         ];
     }
 }
