@@ -28,6 +28,11 @@ class Order extends Model
         return $this->belongsTo(OrderLog::class);
     }
 
+    public function services()
+    {
+        return $this->belongsToMany(Service::class);
+    }
+
     protected static function newFactory()
     {
         return OrderFactory::new();

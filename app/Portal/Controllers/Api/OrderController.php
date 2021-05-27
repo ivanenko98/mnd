@@ -12,7 +12,6 @@ use App\Portal\Models\Order;
 use App\Portal\Models\Permission;
 use App\Portal\Models\Role;
 use App\Portal\Models\User;
-use App\Portal\User\Requests\CreateRequest;
 use App\Portal\User\Requests\UpdateRequest;
 use App\Portal\User\Requests\UploadAvatarRequest;
 use App\Portal\User\Requests\UserRequest;
@@ -63,27 +62,21 @@ class OrderController extends BaseController
 
         return OrderResource::collection($query->orderBy('created_at', 'desc')->paginate($limit));
     }
-//
-//    /**
-//     * Store a newly created resource in storage.
-//     *
-//     * @param  \Illuminate\Http\Request  $request
-//     * @return UserResource
-//     */
-//    public function store(CreateRequest $request)
-//    {
-//        $params = $request->all();
-//        $user = User::create([
-//            'first_name' => $params['first_name'],
-//            'last_name' => $params['last_name'],
-//            'email' => $params['email'],
-//            'password' => Hash::make($params['password']),
-//        ]);
-//        $role = Role::findByName($params['role']);
-//        $user->syncRoles($role);
-//
-//        return new UserResource($user);
-//    }
+
+    public function store(CreateRequest $request)
+    {
+        $params = $request->all();
+        $user = User::create([
+            'first_name' => $params['first_name'],
+            'last_name' => $params['last_name'],
+            'email' => $params['email'],
+            'password' => Hash::make($params['password']),
+        ]);
+        $role = Role::findByName($params['role']);
+        $user->syncRoles($role);
+
+        return new UserResource($user);
+    }
 //
 //    /**
 //     * Display the specified resource.

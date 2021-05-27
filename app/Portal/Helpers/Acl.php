@@ -23,6 +23,8 @@ final class Acl
     const ROLE_MASTER = 'master';
 
     const PERMISSION_SKILLS_LIST = 'skills list';
+    const PERMISSION_SERVICES_LIST = 'services list';
+    const PERMISSION_CITIES_LIST = 'cities list';
 
     const PERMISSION_MASTERS_MANAGE = 'manage masters';
     const PERMISSION_MANAGERS_MANAGE = 'manage managers';

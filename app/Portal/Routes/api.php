@@ -43,6 +43,16 @@ Route::namespace('Api')->group(function () {
         // Orders
         Route::apiResource('orders', 'OrderController')->middleware('permission:' . Acl::PERMISSION_ORDERS_MANAGE);
 
+        // Services
+        Route::group(['prefix' => 'services'], function () {
+            Route::get('/', 'ServiceController@index')->middleware('permission:' . Acl::PERMISSION_SERVICES_LIST);
+        });
+
+        // Cities
+        Route::group(['prefix' => 'cities'], function () {
+            Route::get('/', 'CityController@index')->middleware('permission:' . Acl::PERMISSION_CITIES_LIST);
+        });
+
         // Api resource routes
         Route::apiResource('roles', 'RoleController')->middleware('permission:' . Acl::PERMISSION_PERMISSION_MANAGE);
         Route::apiResource('permissions', 'PermissionController')->middleware('permission:' . Acl::PERMISSION_PERMISSION_MANAGE);

@@ -75,27 +75,33 @@
 
         <el-dialog :title="$t('table.create_new_order')" :visible.sync="dialogFormVisible">
             <div v-loading="orderCreating" class="form-container">
-                <el-form ref="orderForm" :rules="rules" :model="newOrder" label-position="left" label-width="150px" style="max-width: 500px;">
-<!--                    <el-form-item :label="$t('user.role')" prop="role">-->
-<!--                        <el-select v-model="newOrder.role" class="filter-item" placeholder="Please select role">-->
-<!--                            <el-option v-for="item in nonAdminRoles" :key="item" :label="item | uppercaseFirst" :value="item" />-->
-<!--                        </el-select>-->
-<!--                    </el-form-item>-->
-                    <el-form-item :label="$t('form.first_name')" :error="this.errors.phone_number[0]" required>
-                        <el-input v-model="newOrder.phone_number"/>
+                <el-form ref="orderForm" :model="newOrder" label-position="left" label-width="150px" style="max-width: 500px;">
+                    <el-form-item :label="$t('form.phone_number')" :error="this.errors.phone_number[0]" required>
+                        <el-input :placeholder="$t('form.phone_number_placeholder')" v-model="newOrder.phone_number">
+                            <template slot="prepend">+380</template>
+                        </el-input>
                     </el-form-item>
-<!--                    <el-form-item :label="$t('form.last_name')" :error="this.errors.last_name[0]" required>-->
-<!--                        <el-input v-model="newOrder.last_name"/>-->
-<!--                    </el-form-item>-->
-<!--                    <el-form-item :label="$t('form.email')" :error="this.errors.email[0]" required>-->
-<!--                        <el-input v-model="newOrder.email"/>-->
-<!--                    </el-form-item>-->
-<!--                    <el-form-item :label="$t('user.password')" :error="this.errors.password[0]" prop="password">-->
-<!--                        <el-input v-model="newOrder.password" show-password />-->
-<!--                    </el-form-item>-->
-<!--                    <el-form-item :label="$t('user.password_confirmation')" prop="password_confirmation" required>-->
-<!--                        <el-input v-model="newOrder.password_confirmation" show-password />-->
-<!--                    </el-form-item>-->
+                    <el-form-item :label="$t('form.services')" :error="this.errors.services[0]" required>
+                        <div class="block">
+                            <el-cascader
+                                v-model="newOrder.services"
+                                :options="servicesList"
+                                :props="{multiple: true}"
+                                collapse-tags
+                                clearable style="width:100%"></el-cascader>
+                        </div>
+                    </el-form-item>
+                    <el-form-item :label="$t('form.city')" :error="this.errors.city[0]" required>
+                        <el-select v-model="newOrder.city" class="filter-item" :placeholder="$t('form.select_city')" filterable clearable>
+                            <el-option v-for="city in cityList" :key="city.id" :label="city.title" :value="city.id" />
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item :label="$t('form.address')" :error="this.errors.address[0]" required>
+                        <el-input v-model="newOrder.address" :placeholder="$t('form.address_placeholder')"/>
+                    </el-form-item>
+                    <el-form-item :label="$t('form.comment')" :error="this.errors.comment[0]">
+                        <el-input v-model="newOrder.comment" type="textarea"/>
+                    </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible = false">
@@ -116,12 +122,19 @@
     import waves from '@/directive/waves';
     import permission from "@/directive/permission";
     import role from "@/directive/role"; // Waves directive
+    import ElDragSelect from '@/components/DragSelect';
+    import ServiceResource from '@/api/service';
+    import CityResource from '@/api/city';
 
+    const cityResource = new CityResource();
+    const serviceResource = new ServiceResource();
     const orderResource = new Resource('orders');
+
+
 
     export default {
         name: 'OrderList',
-        components: {Pagination},
+        components: {Pagination, ElDragSelect},
         directives: { waves },
         filters: {
             statusFilter(status) {
@@ -149,18 +162,16 @@
                 dialogFormVisible: false,
                 orderCreating: false,
                 newOrder: {},
-                defaultErrorsObject: {
-                    phone_number: '',
-                },
+                servicesList: [],
+                cityList: [],
                 errors: {},
-                rules: {
-                    phone_number: [{ required: true, message: 'Phone is required', trigger: 'change' }],
-                },
             };
         },
         created() {
             this.getList();
             this.setDefaultErrors();
+            this.getListServices();
+            this.getListCities();
         },
         methods: {
             async getList() {
@@ -188,11 +199,10 @@
             resetNewOrder() {
                 this.newOrder = {
                     phone_number: '',
-                    // last_name: '',
-                    // email: '',
-                    // password: '',
-                    // password_confirmation: '',
-                    // role: 'master',
+                    services: [[2, 3]],
+                    city: '',
+                    address: '',
+                    comment: '',
                 };
             },
             createOrder() {
@@ -227,7 +237,21 @@
                 // });
             },
             setDefaultErrors() {
-                this.errors = this.defaultErrorsObject
+                this.errors = {
+                    phone_number: '',
+                    services: '',
+                    city: '',
+                    address: '',
+                    comment: '',
+                };
+            },
+            async getListServices() {
+                const { data } = await serviceResource.list({});
+                this.servicesList = data;
+            },
+            async getListCities() {
+                const { data } = await cityResource.list({});
+                this.cityList = data;
             },
         },
     };

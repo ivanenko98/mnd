@@ -180,12 +180,6 @@ export default {
       permissions: [],
       menuPermissions: [],
       otherPermissions: [],
-        defaultErrorsObject: {
-            first_name: '',
-            last_name: '',
-            email: '',
-            password: '',
-        },
         errors: {},
     };
   },
