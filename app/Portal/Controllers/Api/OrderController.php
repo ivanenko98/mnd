@@ -79,20 +79,18 @@ class OrderController extends BaseController
         return response($response, 200);
     }
 //
-//    /**
-//     * Display the specified resource.
-//     *
-//     * @param User $user
-//     * @return MasterResource|UserResource
-//     */
-//    public function show(User $user)
-//    {
-//        if ($user->hasRole('master')) {
-//            return new MasterResource($user);
-//        } else {
-//            return new UserResource($user);
-//        }
-//    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param Order $order
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function show(Order $order)
+    {
+        $response = $this->formatResponse('success', null, new OrderResource($order));
+        return response($response, 200);
+    }
 //
 //    /**
 //     * Update the specified resource in storage.
