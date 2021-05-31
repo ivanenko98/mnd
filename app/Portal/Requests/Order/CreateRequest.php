@@ -3,6 +3,7 @@
 namespace App\Portal\Order\Requests;
 
 use App\Core\Http\Requests\BaseRequest;
+use App\Core\Rules\PhoneNumber;
 use App\Portal\Helpers\Acl;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,12 +29,12 @@ class CreateRequest extends BaseRequest
     public function rules()
     {
         return [
-            'phone_number' => 'required|string|min:2|max:255',
+            'phone_number' => ['required', new PhoneNumber],
             'services' => 'required|array',
-            'services.*' => 'integer|exist:services,id',
-            'city_id' => 'required|exist:cities,id',
+//            'services.*' => 'integer|exist:services,id',
+            'city' => 'required|exists:cities,id',
             'address' => 'required|string',
-            'comment' => 'required|string',
+            'comment' => 'nullable|string',
         ];
     }
 }

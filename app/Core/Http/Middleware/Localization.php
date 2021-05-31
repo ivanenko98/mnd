@@ -21,12 +21,14 @@ class Localization
     {
         $authUser = Auth::user();
 
-        $langSetting = Cache::remember('language', 60*60*24, function () use ($authUser) {
-            return $authUser->settings()->title('language')->first();
-        });
+        if ($authUser !== null) {
+            $langSetting = Cache::remember('language', 60*60*24, function () use ($authUser) {
+                return $authUser->settings()->title('language')->first();
+            });
 
-        if ($langSetting !== null) {
-            app()->setLocale($langSetting->pivot->value);
+            if ($langSetting !== null) {
+                app()->setLocale($langSetting->pivot->value);
+            }
         }
 
         return $next($request);

@@ -184,10 +184,12 @@ class UserController extends BaseController
     {
         $authUser = Auth::user();
 
-        $langSetting = Setting::title('language')->first();
-        $authUser->settings()->syncWithoutDetaching([$langSetting->id => ['value' => $request->lang]]);
+        if ($authUser !== null) {
+            $langSetting = Setting::title('language')->first();
+            $authUser->settings()->syncWithoutDetaching([$langSetting->id => ['value' => $request->lang]]);
 
-        Cache::forget('language');
+            Cache::forget('language');
+        }
 
         $response = $this->formatResponse('success', null);
         return response($response, 200);

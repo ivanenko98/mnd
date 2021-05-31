@@ -123,8 +123,8 @@ return [
     'url'                  => 'Формат поля :attribute хибний.',
     'uuid'                 => 'Поле :attribute має бути коректним UUID ідентифікатором.',
     'custom'               => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'phone_number' => [
+            'phone-number' => 'Невірний формат телефону',
         ],
     ],
     'attributes'           => [
@@ -157,5 +157,10 @@ return [
         'title'                 => 'Назва',
         'username'              => 'Нікнейм',
         'year'                  => 'Рік',
+        'phone_number'          => 'Номер телефону',
+        'services'              => 'Послуги',
+        'comment'               => 'Коментар',
     ],
+    'validation_message' => 'Помилка валідації',
+    'image_format' => 'Неправильне зображення',
 ];

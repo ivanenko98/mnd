@@ -12,6 +12,7 @@ use App\Portal\Models\Order;
 use App\Portal\Models\Permission;
 use App\Portal\Models\Role;
 use App\Portal\Models\User;
+use App\Portal\Order\Requests\CreateRequest;
 use App\Portal\User\Requests\UpdateRequest;
 use App\Portal\User\Requests\UploadAvatarRequest;
 use App\Portal\User\Requests\UserRequest;
@@ -65,17 +66,17 @@ class OrderController extends BaseController
 
     public function store(CreateRequest $request)
     {
-        $params = $request->all();
-        $user = User::create([
-            'first_name' => $params['first_name'],
-            'last_name' => $params['last_name'],
-            'email' => $params['email'],
-            'password' => Hash::make($params['password']),
+        $order = Order::create([
+            'phone_number' => $request->phone_number,
+            'city_id' => $request->city,
+            'address' => $request->address,
+            'comment' => $request->comment,
         ]);
-        $role = Role::findByName($params['role']);
-        $user->syncRoles($role);
 
-        return new UserResource($user);
+        $order->services()->attach($this->parseServices($request->services));
+
+        $response = $this->formatResponse('success', null, new OrderResource($order));
+        return response($response, 200);
     }
 //
 //    /**
@@ -159,4 +160,15 @@ class OrderController extends BaseController
 //        $response = $this->formatResponse('success', null);
 //        return response($response, 204);
 //    }
+
+    protected function parseServices($services)
+    {
+        $parsedServices = [];
+
+        foreach ($services as $serviceArray) {
+            $parsedServices[] = end($serviceArray);
+        }
+
+        return $parsedServices;
+    }
 }

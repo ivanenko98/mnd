@@ -27,9 +27,10 @@
 
             <el-table-column width="120px" align="center" :label="$t('table.master')">
                 <template slot-scope="scope">
-                    <router-link :to="'/users/edit/'+scope.row.master.id" class="link-type">
+                    <router-link v-if="scope.row.master != null" :to="'/users/edit/'+scope.row.master.id" class="link-type">
                         <span>{{ scope.row.master.first_name+' '+scope.row.master.last_name }}</span>
                     </router-link>
+                    <span v-else>{{ $t('table.master_is_searching') }}</span>
                 </template>
             </el-table-column>
 
@@ -41,14 +42,15 @@
 
             <el-table-column width="120px" align="center" :label="$t('table.total_cost')">
                 <template slot-scope="scope">
-                    <span>₴{{ scope.row.total_cost }}</span>
+                    <span v-if="scope.row.total_cost != null">₴{{ scope.row.total_cost }}</span>
+                    <span v-else>{{ $t('table.total_cost_not_set') }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column class-name="status-col" :label="$t('table.status')" width="170">
+            <el-table-column class-name="status-col" :label="$t('table.status')" width="190">
                 <template slot-scope="{row}">
                     <el-tag :type="row.status | statusFilter">
-                        {{ row.status }}
+                        {{ $t('table.status_'+row.status) }}
                     </el-tag>
                 </template>
             </el-table-column>
@@ -141,7 +143,7 @@
                 const statusMap = {
                     new: 'primary',
                     is_pending: 'info',
-                    in_progress: 'primary',
+                    in_progress: 'progress',
                     done_by_master: 'success',
                     checking_by_manager: 'warning',
                     completed: 'success',
@@ -199,42 +201,33 @@
             resetNewOrder() {
                 this.newOrder = {
                     phone_number: '',
-                    services: [[2, 3]],
+                    services: [],
                     city: '',
                     address: '',
                     comment: '',
                 };
             },
             createOrder() {
-                // this.$refs['userForm'].validate((valid) => {
-                //     if (valid) {
-                //         this.newUser.roles = [this.newUser.role];
-                //         this.userCreating = true;
-                //         userResource
-                //             .store(this.newUser)
-                //             .then(response => {
-                //                 this.$message({
-                //                     message: 'New user ' + this.newUser.name + '(' + this.newUser.email + ') has been created successfully.',
-                //                     type: 'success',
-                //                     duration: 5 * 1000,
-                //                 });
-                //                 this.resetNewUser();
-                //                 this.setDefaultErrors();
-                //                 this.dialogFormVisible = false;
-                //                 this.handleFilter();
-                //             })
-                //             .catch(error => {
-                //                 this.errors = error.response.data.data;
-                //                 console.log(error);
-                //             })
-                //             .finally(() => {
-                //                 this.userCreating = false;
-                //             });
-                //     } else {
-                //         console.log('error submit!!');
-                //         return false;
-                //     }
-                // });
+                this.orderCreating = true;
+                orderResource
+                    .store(this.newOrder)
+                    .then(response => {
+                        this.$message({
+                            message: this.$t('table.order_created'),
+                            type: 'success',
+                            duration: 5 * 1000,
+                        });
+                        this.resetNewOrder();
+                        this.setDefaultErrors();
+                        this.dialogFormVisible = false;
+                        this.handleFilter();
+                    })
+                    .catch(error => {
+                        this.setErrors(error.response.data.data);
+                    })
+                    .finally(() => {
+                        this.orderCreating = false;
+                    });
             },
             setDefaultErrors() {
                 this.errors = {
@@ -244,6 +237,14 @@
                     address: '',
                     comment: '',
                 };
+            },
+            setErrors(errors) {
+
+                this.setDefaultErrors();
+
+                for (let key in errors) {
+                    this.errors[key] = errors[key];
+                }
             },
             async getListServices() {
                 const { data } = await serviceResource.list({});
