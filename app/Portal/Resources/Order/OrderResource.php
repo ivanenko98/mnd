@@ -18,6 +18,7 @@ class OrderResource extends JsonResource
             'id' => $this->id,
             'phone_number' => $this->phone_number,
             'master' => $this->master,
+            'services' => ServiceResource::collection($this->services),
             'city' => $this->city,
             'status' => $this->status,
             'address' => $this->address,

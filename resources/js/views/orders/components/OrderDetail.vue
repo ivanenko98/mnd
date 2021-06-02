@@ -5,68 +5,102 @@
                 <el-col>
                     <el-card v-if="order.id">
                         <el-tabs v-model="activeTab">
-                                                        <el-tab-pane v-loading="updating" :label="$t('form.edit')" name="first">
-                                                            <el-form-item :label="$t('form.phone_number')" :error="this.errors.phone_number[0]" required>
-                                                                <el-input :placeholder="$t('form.phone_number_placeholder')" v-model="order.phone_number">
-                                                                    <template slot="prepend">+380</template>
-                                                                </el-input>
-                                                            </el-form-item>
-                                                            <el-form-item :label="$t('form.services')" :error="this.errors.services[0]" required>
-                                                                <div class="block">
-                                                                    <el-cascader
-                                                                        v-model="order.services"
-                                                                        :options="servicesList"
-                                                                        :props="{multiple: true}"
-                                                                        collapse-tags
-                                                                        clearable style="width:100%"></el-cascader>
-                                                                </div>
-                                                            </el-form-item>
-                                                            <el-form-item :label="$t('form.city')" :error="this.errors.city[0]" required>
-                                                                <el-select v-model="order.city" class="filter-item" :placeholder="$t('form.select_city')" filterable clearable>
-                                                                    <el-option v-for="city in cityList" :key="city.id" :label="city.title" :value="city.id" />
-                                                                </el-select>
-                                                            </el-form-item>
-                                                            <el-form-item :label="$t('form.address')" :error="this.errors.address[0]" required>
-                                                                <el-input v-model="order.address" :placeholder="$t('form.address_placeholder')"/>
-                                                            </el-form-item>
-                                                            <el-form-item :label="$t('form.comment')" :error="this.errors.comment[0]">
-                                                                <el-input v-model="order.comment" type="textarea"/>
-                                                            </el-form-item>
-<!--                                                            <el-form-item>-->
-<!--                                                                <el-col :span="11">-->
-<!--                                                                    <el-form-item :label="$t('form.first_name')" :error="this.errors.first_name[0]">-->
-<!--                                                                        <el-input v-model="user.first_name"/>-->
-<!--                                                                    </el-form-item>-->
-<!--                                                                </el-col>-->
-<!--                                                                <el-col :span="11">-->
-<!--                                                                    <el-form-item :label="$t('form.last_name')" :error="this.errors.last_name[0]">-->
-<!--                                                                        <el-input v-model="user.last_name"/>-->
-<!--                                                                    </el-form-item>-->
-<!--                                                                </el-col>-->
-<!--                                                            </el-form-item>-->
+                            <el-tab-pane v-loading="updating" :label="$t('form.edit')" name="first">
+                                <el-row>
+                                    <el-col :span="15">
+                                        <el-card>
 
-<!--                                                            <el-form-item :label="$t('form.email')">-->
-<!--                                                                <el-input v-model="user.email" :error="this.errors.email[0]"/>-->
-<!--                                                            </el-form-item>-->
+                                            <el-form-item :label="$t('form.phone_number')"
+                                                          :error="this.errors.phone_number[0]" required>
+                                                <el-input :placeholder="$t('form.phone_number_placeholder')"
+                                                          v-model="order.phone_number">
+                                                    <template slot="prepend">+380</template>
+                                                </el-input>
+                                            </el-form-item>
+                                            <el-form-item :label="$t('form.services')" :error="this.errors.services[0]"
+                                                          required>
+                                                <div class="block">
+                                                    <el-cascader
+                                                        v-model="order.services"
+                                                        :options="servicesList"
+                                                        :props="{multiple: true}"
+                                                        collapse-tags
+                                                        clearable style="width:100%"></el-cascader>
+                                                </div>
+                                            </el-form-item>
+                                            <el-form-item :label="$t('form.city')" :error="this.errors.city[0]"
+                                                          required>
+                                                <el-select v-model="order.city" class="filter-item"
+                                                           :placeholder="$t('form.select_city')" filterable clearable>
+                                                    <el-option v-for="city in cityList" :key="city.id"
+                                                               :label="city.title" :value="city.id"/>
+                                                </el-select>
+                                            </el-form-item>
+                                            <el-form-item :label="$t('form.address')" :error="this.errors.address[0]"
+                                                          required>
+                                                <el-input v-model="order.address"
+                                                          :placeholder="$t('form.address_placeholder')"/>
+                                            </el-form-item>
+                                            <el-form-item :label="$t('form.comment')" :error="this.errors.comment[0]">
+                                                <el-input v-model="order.comment" type="textarea"/>
+                                            </el-form-item>
+                                            <!--                                                            <el-form-item>-->
+                                            <!--                                                                <el-col :span="11">-->
+                                            <!--                                                                    <el-form-item :label="$t('form.first_name')" :error="this.errors.first_name[0]">-->
+                                            <!--                                                                        <el-input v-model="user.first_name"/>-->
+                                            <!--                                                                    </el-form-item>-->
+                                            <!--                                                                </el-col>-->
+                                            <!--                                                                <el-col :span="11">-->
+                                            <!--                                                                    <el-form-item :label="$t('form.last_name')" :error="this.errors.last_name[0]">-->
+                                            <!--                                                                        <el-input v-model="user.last_name"/>-->
+                                            <!--                                                                    </el-form-item>-->
+                                            <!--                                                                </el-col>-->
+                                            <!--                                                            </el-form-item>-->
 
-<!--                                                            <el-form-item :label="$t('form.about')">-->
-<!--                                                                <el-input v-model="user.about" type="textarea" :error="this.errors.about[0]"/>-->
-<!--                                                            </el-form-item>-->
+                                            <!--                                                            <el-form-item :label="$t('form.email')">-->
+                                            <!--                                                                <el-input v-model="user.email" :error="this.errors.email[0]"/>-->
+                                            <!--                                                            </el-form-item>-->
 
-<!--                                                            <el-form-item :label="$t('form.date_of_birth')" :error="this.errors.date_of_birth[0]">-->
-<!--                                                                <el-date-picker v-model="user.date_of_birth" :placeholder="$t('form.pick_date')" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd"/>-->
-<!--                                                            </el-form-item>-->
+                                            <!--                                                            <el-form-item :label="$t('form.about')">-->
+                                            <!--                                                                <el-input v-model="user.about" type="textarea" :error="this.errors.about[0]"/>-->
+                                            <!--                                                            </el-form-item>-->
 
-<!--                                                            <el-form-item :label="$t('form.skills')" :error="this.errors.skills[0]">-->
-<!--                                                                <el-drag-select v-model="user.skills" style="width:500px;" multiple :placeholder="$t('form.select_skills')">-->
-<!--                                                                    <el-option v-for="skill in skillsList" :key="skill.id" :label="skill.title" :value="skill.id" />-->
-<!--                                                                </el-drag-select>-->
-<!--                                                            </el-form-item>-->
+                                            <!--                                                            <el-form-item :label="$t('form.date_of_birth')" :error="this.errors.date_of_birth[0]">-->
+                                            <!--                                                                <el-date-picker v-model="user.date_of_birth" :placeholder="$t('form.pick_date')" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd"/>-->
+                                            <!--                                                            </el-form-item>-->
 
-                                                            <el-button type="primary" @click="onSubmit">
-                                                                {{$t('form.update')}}
-                                                            </el-button>
-                                                        </el-tab-pane>
+                                            <!--                                                            <el-form-item :label="$t('form.skills')" :error="this.errors.skills[0]">-->
+                                            <!--                                                                <el-drag-select v-model="user.skills" style="width:500px;" multiple :placeholder="$t('form.select_skills')">-->
+                                            <!--                                                                    <el-option v-for="skill in skillsList" :key="skill.id" :label="skill.title" :value="skill.id" />-->
+                                            <!--                                                                </el-drag-select>-->
+                                            <!--                                                            </el-form-item>-->
+
+                                            <el-button type="primary" @click="onSubmit">
+                                                {{$t('form.update')}}
+                                            </el-button>
+                                        </el-card>
+                                    </el-col>
+
+                                    <el-col :span="8" :offset="1">
+                                        <el-card>
+                                            <div class="box-center">
+                                                <pan-thumb :image="masterAvatar" :height="'100px'"
+                                                           :width="'100px'" :hoverable="false"/>
+                                            </div>
+                                            <el-form-item :label="$t('form.master')" :error="this.errors.master[0]"
+                                                          required>
+                                                <el-select v-model="order.master" class="filter-item"
+                                                           :placeholder="$t('form.select_master')" @change="changeMaster" filterable clearable>
+                                                    <el-option v-for="master in mastersList" :key="master.id"
+                                                               :label="master.full_name" :value="master.id"/>
+                                                </el-select>
+                                            </el-form-item>
+                                        </el-card>
+                                    </el-col>
+
+                                </el-row>
+
+                            </el-tab-pane>
                             <el-tab-pane :label="$t('order.tabs.timeline')" name="second">
                                 <div class="block">
                                     <el-timeline>
@@ -110,14 +144,17 @@
     import ServiceResource from '@/api/service';
     import CityResource from '@/api/city';
     import OrderResource from "@/api/order";
+    import UserResource from "@/api/user";
+    import PanThumb from '@/components/PanThumb';
 
     const cityResource = new CityResource();
     const orderResource = new OrderResource();
     const serviceResource = new ServiceResource();
+    const userResource = new UserResource();
 
     export default {
         name: 'OrderDetail',
-        components: {},
+        components: {PanThumb},
         props: {
             order: {
                 type: Object,
@@ -144,13 +181,16 @@
                 tempRoute: {},
                 servicesList: [],
                 cityList: [],
+                mastersList: [],
                 errors: {},
+                masterAvatar: '/img/avatars/avatar.png',
             };
         },
         created() {
             this.setDefaultErrors();
             this.getListServices();
             this.getListCities();
+            this.getListMasters();
             // Why need to make a copy of this.$route here?
             // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
             this.tempRoute = Object.assign({}, this.$route);
@@ -180,6 +220,16 @@
                         // this.updating = false;
                     });
             },
+            changeMaster(id) {
+                this.setMasterAvatar(id);
+            },
+            setMasterAvatar(id) {
+                this.mastersList.forEach(master => {
+                    if (master.id === id) {
+                        this.masterAvatar = master.avatar;
+                    }
+                });
+            },
             setDefaultErrors() {
                 this.errors = {
                     phone_number: '',
@@ -187,6 +237,7 @@
                     city: '',
                     address: '',
                     comment: '',
+                    master: '',
                 };
             },
             setErrors(errors) {
@@ -198,12 +249,16 @@
                 }
             },
             async getListServices() {
-                const { data } = await serviceResource.list({});
+                const {data} = await serviceResource.list({});
                 this.servicesList = data;
             },
             async getListCities() {
-                const { data } = await cityResource.list({});
+                const {data} = await cityResource.list({});
                 this.cityList = data;
+            },
+            async getListMasters() {
+                const {data} = await userResource.listMasters();
+                this.mastersList = data;
             },
         },
     };

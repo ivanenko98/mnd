@@ -194,4 +194,9 @@ class UserController extends BaseController
         $response = $this->formatResponse('success', null);
         return response($response, 200);
     }
+
+    public function listMasters()
+    {
+        return UserResource::collection(User::role('master')->get());
+    }
 }

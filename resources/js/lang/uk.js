@@ -155,7 +155,7 @@ export default {
         warning: 'Увага',
         create_new_order: 'Створити нове замовлення',
         phone: 'Телефон',
-        master: 'Мастер',
+        master: 'Майстер',
         city: 'Місто',
         total_cost: 'Сума замовлення',
         created_at: 'Дата створення',
@@ -247,6 +247,7 @@ export default {
         address: 'Адреса',
         address_placeholder: 'вул. Незалежності 50, кв. 7, 2п',
         comment: 'Коментар',
+        master: 'Майстер',
     },
     notifications: {
         changed_language: 'Мову успішно змінено'

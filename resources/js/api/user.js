@@ -14,20 +14,27 @@ class UserResource extends Resource {
         });
     }
 
-  permissions(id) {
-    return request({
-      url: '/' + this.uri + '/' + id + '/permissions',
-      method: 'get',
-    });
-  }
-
-  updatePermission(id, permissions) {
-    return request({
-      url: '/' + this.uri + '/' + id + '/permissions',
-      method: 'put',
-      data: permissions,
-    });
-  }
+    listMasters() {
+        return request({
+            url: '/' + this.uri + '/masters',
+            method: 'get',
+        });
+    }
+  //
+  // permissions(id) {
+  //   return request({
+  //     url: '/' + this.uri + '/' + id + '/permissions',
+  //     method: 'get',
+  //   });
+  // }
+  //
+  // updatePermission(id, permissions) {
+  //   return request({
+  //     url: '/' + this.uri + '/' + id + '/permissions',
+  //     method: 'put',
+  //     data: permissions,
+  //   });
+  // }
 }
 
 export { UserResource as default };

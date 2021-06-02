@@ -11,7 +11,7 @@ class Service extends Model
 {
     protected $guarded = [];
 
-    public function child()
+    public function parent()
     {
         return $this->belongsTo(Service::class, 'parent_id');
     }

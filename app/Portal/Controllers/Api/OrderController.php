@@ -4,6 +4,7 @@ namespace App\Portal\Controllers\Api;
 
 use App\Core\Traits\FormatResponse;
 use App\Http\Resources\MasterResource;
+use App\Http\Resources\OrderEditResource;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\PermissionResource;
 use App\Http\Resources\UserResource;
@@ -13,12 +14,15 @@ use App\Portal\Models\Permission;
 use App\Portal\Models\Role;
 use App\Portal\Models\User;
 use App\Portal\Order\Requests\CreateRequest;
-use App\Portal\User\Requests\UpdateRequest;
+use App\Portal\Order\Requests\UpdateRequest;
 use App\Portal\User\Requests\UploadAvatarRequest;
 use App\Portal\User\Requests\UserRequest;
 use Carbon\Carbon;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -39,8 +43,8 @@ class OrderController extends BaseController
     /**
      * Display a listing of the user resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response|ResourceCollection
+     * @param Request $request
+     * @return Response|ResourceCollection
      */
     public function index(Request $request)
     {
@@ -84,37 +88,35 @@ class OrderController extends BaseController
      * Display the specified resource.
      *
      * @param Order $order
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return ResponseFactory|Response
      */
     public function show(Order $order)
     {
+        $response = $this->formatResponse('success', null, new OrderEditResource($order));
+        return response($response, 200);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param UpdateRequest $request
+     * @param Order $order
+     * @return ResponseFactory|Response
+     */
+    public function update(UpdateRequest $request, Order $order)
+    {
+        $order->update([
+            'phone_number' => $request->phone_number,
+            'city_id' => $request->city,
+            'address' => $request->address,
+            'comment' => $request->comment,
+        ]);
+
+        $order->services()->sync($this->parseServices($request->services));
+
         $response = $this->formatResponse('success', null, new OrderResource($order));
         return response($response, 200);
     }
-//
-//    /**
-//     * Update the specified resource in storage.
-//     *
-//     * @param UpdateRequest $request
-//     * @param User $user
-//     * @return UserResource|\Illuminate\Http\JsonResponse
-//     */
-//    public function update(UpdateRequest $request, User $user)
-//    {
-//        $user->update([
-//            'first_name' => $request->first_name,
-//            'last_name' => $request->last_name,
-//            'email' => $request->email,
-//            'date_of_birth' => Carbon::parse($request->date_of_birth)->format('Y-m-d'),
-//            'about' => $request->about,
-//        ]);
-//
-//        if ($user->hasRole('master')) {
-//            $user->skills()->sync($request->skills);
-//        }
-//
-//        return response()->json(['success' => true], 201);
-//    }
 //
 //    /**
 //     * Upload avatar.

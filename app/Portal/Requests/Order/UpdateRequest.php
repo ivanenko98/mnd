@@ -5,9 +5,11 @@ namespace App\Portal\Order\Requests;
 use App\Core\Http\Requests\BaseRequest;
 use App\Core\Rules\PhoneNumber;
 use App\Portal\Helpers\Acl;
+use App\Portal\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
-class CreateRequest extends BaseRequest
+class UpdateRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
