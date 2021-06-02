@@ -7,7 +7,7 @@
                         <el-tabs v-model="activeTab">
                             <el-tab-pane v-loading="updating" :label="$t('form.edit')" name="first">
                                 <el-row>
-                                    <el-col :span="15">
+                                    <el-col :span="18">
                                         <el-card>
 
                                             <el-form-item :label="$t('form.phone_number')"
@@ -81,7 +81,7 @@
                                         </el-card>
                                     </el-col>
 
-                                    <el-col :span="8" :offset="1">
+                                    <el-col :span="5" :offset="1">
                                         <el-card>
                                             <div class="box-center">
                                                 <pan-thumb :image="masterAvatar" :height="'100px'"
