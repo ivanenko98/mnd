@@ -28,7 +28,7 @@
             <el-table-column width="120px" align="center" :label="$t('table.master')">
                 <template slot-scope="scope">
                     <router-link v-if="scope.row.master != null" :to="'/users/edit/'+scope.row.master.id" class="link-type">
-                        <span>{{ scope.row.master.first_name+' '+scope.row.master.last_name }}</span>
+                        <span>{{ scope.row.master.first_name+' '+scope.row.master.last_name+' (#'+scope.row.master.id+')' }}</span>
                     </router-link>
                     <span v-else>{{ $t('table.master_is_searching') }}</span>
                 </template>

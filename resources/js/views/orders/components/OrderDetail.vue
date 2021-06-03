@@ -5,7 +5,7 @@
                 <el-col>
                     <el-card v-if="order.id">
                         <el-tabs v-model="activeTab">
-                            <el-tab-pane v-loading="updating" :label="$t('form.edit')" name="first">
+                            <el-tab-pane v-loading="updating" :label="$t('order.tabs.edit')" name="first">
                                 <el-row>
                                     <el-col :span="18">
                                         <el-card>
@@ -24,7 +24,6 @@
                                                         v-model="order.services"
                                                         :options="servicesList"
                                                         :props="{multiple: true}"
-                                                        collapse-tags
                                                         clearable style="width:100%"></el-cascader>
                                                 </div>
                                             </el-form-item>
@@ -76,7 +75,7 @@
                                             <!--                                                            </el-form-item>-->
 
                                             <el-button type="primary" @click="onSubmit">
-                                                {{$t('form.update')}}
+                                                {{$t('form.save')}}
                                             </el-button>
                                         </el-card>
                                     </el-col>
@@ -90,9 +89,11 @@
                                             <el-form-item :label="$t('form.master')" :error="this.errors.master[0]"
                                                           required>
                                                 <el-select v-model="order.master" class="filter-item"
-                                                           :placeholder="$t('form.select_master')" @change="changeMaster" filterable clearable>
+                                                           :placeholder="$t('form.select_master')"
+                                                           @change="changeMaster" @clear="clearMaster" filterable
+                                                           clearable>
                                                     <el-option v-for="master in mastersList" :key="master.id"
-                                                               :label="master.full_name" :value="master.id"/>
+                                                               :label="master.full_name+' (#'+master.id+')'" :value="master.id"/>
                                                 </el-select>
                                             </el-form-item>
                                         </el-card>
@@ -146,11 +147,13 @@
     import OrderResource from "@/api/order";
     import UserResource from "@/api/user";
     import PanThumb from '@/components/PanThumb';
+    import Variables from '@/utils/variables';
 
     const cityResource = new CityResource();
     const orderResource = new OrderResource();
     const serviceResource = new ServiceResource();
     const userResource = new UserResource();
+    const variables = new Variables();
 
     export default {
         name: 'OrderDetail',
@@ -166,6 +169,7 @@
                         created_at: '',
                         id: '',
                         master: '',
+                        master_avatar: '',
                         phone_number: '',
                         platform_fee: '',
                         status: '',
@@ -183,8 +187,15 @@
                 cityList: [],
                 mastersList: [],
                 errors: {},
-                masterAvatar: '/img/avatars/avatar.png',
+                masterAvatar: variables.getDefaultUserAvatar(),
             };
+        },
+        watch: {
+            order: function (newOrder) {
+                if (newOrder.master !== null) {
+                    this.masterAvatar = newOrder.master_avatar;
+                }
+            }
         },
         created() {
             this.setDefaultErrors();
@@ -202,7 +213,7 @@
                     .update(this.order.id, this.order)
                     .then(response => {
                         this.updating = false;
-                        // this.setDefaultErrors();
+                        this.setDefaultErrors();
 
                         this.$message({
                             message: 'Order information has been updated successfully',
@@ -211,17 +222,17 @@
                         });
                     })
                     .catch(error => {
-
-
-                        // this.errors = error.response.data.data;
-                        //
-                        // console.log(error.response.data.data);
-                        //
-                        // this.updating = false;
+                        this.setErrors(error.response.data.data);
+                    })
+                    .finally(() => {
+                        this.updating = false;
                     });
             },
             changeMaster(id) {
                 this.setMasterAvatar(id);
+            },
+            clearMaster() {
+                this.masterAvatar = variables.getDefaultUserAvatar();
             },
             setMasterAvatar(id) {
                 this.mastersList.forEach(master => {

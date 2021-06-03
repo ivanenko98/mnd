@@ -17,7 +17,8 @@ class OrderEditResource extends JsonResource
         return [
             'id' => $this->id,
             'phone_number' => $this->phone_number,
-            'master' => $this->master,
+            'master' => optional($this->master)->id,
+            'master_avatar' => optional($this->master)->avatar,
             'services' => ServiceSelectedResource::collection($this->services),
             'city' => optional($this->city)->id,
             'status' => $this->status,

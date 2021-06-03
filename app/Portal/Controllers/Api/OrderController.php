@@ -108,6 +108,7 @@ class OrderController extends BaseController
         $order->update([
             'phone_number' => $request->phone_number,
             'city_id' => $request->city,
+            'master_id' => $request->master,
             'address' => $request->address,
             'comment' => $request->comment,
         ]);

@@ -34,6 +34,7 @@ class UpdateRequest extends BaseRequest
             'phone_number' => ['required', new PhoneNumber],
             'services' => 'required|array',
             'city' => 'required|exists:cities,id',
+            'master' => 'nullable|exists:users,id',
             'address' => 'required|string',
             'comment' => 'nullable|string',
         ];

@@ -238,6 +238,7 @@ export default {
         select_skills: 'Виберіть Навички',
         change_avatar: 'Змінити Аватар',
         update: 'Оновити',
+        save: 'Зберегти',
         phone_number: 'Номер телефону',
         phone_number_placeholder: '0684637794',
         services: 'Послуги',
@@ -248,6 +249,17 @@ export default {
         address_placeholder: 'вул. Незалежності 50, кв. 7, 2п',
         comment: 'Коментар',
         master: 'Майстер',
+        select_master: 'Виберіть Майстра',
+        tabs: {
+            edit: 'Редагування',
+            timeline: 'Часова шкала',
+        },
+    },
+    order: {
+        tabs: {
+            edit: 'Редагування',
+            timeline: 'Часова шкала',
+        },
     },
     notifications: {
         changed_language: 'Мову успішно змінено'
