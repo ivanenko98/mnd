@@ -9,7 +9,6 @@
                                 <el-row>
                                     <el-col :span="18">
                                         <el-card>
-
                                             <el-form-item :label="$t('form.phone_number')"
                                                           :error="this.errors.phone_number[0]" required>
                                                 <el-input :placeholder="$t('form.phone_number_placeholder')"
@@ -43,37 +42,6 @@
                                             <el-form-item :label="$t('form.comment')" :error="this.errors.comment[0]">
                                                 <el-input v-model="order.comment" type="textarea"/>
                                             </el-form-item>
-                                            <!--                                                            <el-form-item>-->
-                                            <!--                                                                <el-col :span="11">-->
-                                            <!--                                                                    <el-form-item :label="$t('form.first_name')" :error="this.errors.first_name[0]">-->
-                                            <!--                                                                        <el-input v-model="user.first_name"/>-->
-                                            <!--                                                                    </el-form-item>-->
-                                            <!--                                                                </el-col>-->
-                                            <!--                                                                <el-col :span="11">-->
-                                            <!--                                                                    <el-form-item :label="$t('form.last_name')" :error="this.errors.last_name[0]">-->
-                                            <!--                                                                        <el-input v-model="user.last_name"/>-->
-                                            <!--                                                                    </el-form-item>-->
-                                            <!--                                                                </el-col>-->
-                                            <!--                                                            </el-form-item>-->
-
-                                            <!--                                                            <el-form-item :label="$t('form.email')">-->
-                                            <!--                                                                <el-input v-model="user.email" :error="this.errors.email[0]"/>-->
-                                            <!--                                                            </el-form-item>-->
-
-                                            <!--                                                            <el-form-item :label="$t('form.about')">-->
-                                            <!--                                                                <el-input v-model="user.about" type="textarea" :error="this.errors.about[0]"/>-->
-                                            <!--                                                            </el-form-item>-->
-
-                                            <!--                                                            <el-form-item :label="$t('form.date_of_birth')" :error="this.errors.date_of_birth[0]">-->
-                                            <!--                                                                <el-date-picker v-model="user.date_of_birth" :placeholder="$t('form.pick_date')" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd"/>-->
-                                            <!--                                                            </el-form-item>-->
-
-                                            <!--                                                            <el-form-item :label="$t('form.skills')" :error="this.errors.skills[0]">-->
-                                            <!--                                                                <el-drag-select v-model="user.skills" style="width:500px;" multiple :placeholder="$t('form.select_skills')">-->
-                                            <!--                                                                    <el-option v-for="skill in skillsList" :key="skill.id" :label="skill.title" :value="skill.id" />-->
-                                            <!--                                                                </el-drag-select>-->
-                                            <!--                                                            </el-form-item>-->
-
                                             <el-button type="primary" @click="onSubmit">
                                                 {{$t('form.save')}}
                                             </el-button>
@@ -82,6 +50,19 @@
 
                                     <el-col :span="5" :offset="1">
                                         <el-card>
+                                            <div class="status-wrap">
+                                                {{$t('form.status')+': '}}
+                                                <el-dropdown @command="handleSelectStatus">
+                                                    <el-tag :type="order.status | statusFilter">
+                                                        {{ $t('table.status_'+order.status) }}
+                                                    </el-tag>
+                                                    <el-dropdown-menu slot="dropdown">
+                                                        <el-dropdown-item v-for="(type, status) in statusMapList" :key="status" :label="status" :command="status">
+                                                            <span :class="type">{{ $t('table.status_'+status) }}</span>
+                                                        </el-dropdown-item>
+                                                    </el-dropdown-menu>
+                                                </el-dropdown>
+                                            </div>
                                             <div class="box-center">
                                                 <pan-thumb :image="masterAvatar" :height="'100px'"
                                                            :width="'100px'" :hoverable="false"/>
@@ -96,6 +77,10 @@
                                                                :label="master.full_name+' (#'+master.id+')'" :value="master.id"/>
                                                 </el-select>
                                             </el-form-item>
+
+                                            <el-button v-if="order.status !== 'cancelled'" type="danger" @click="handleCancelling()">
+                                                {{$t('form.cancel_order')}}
+                                            </el-button>
                                         </el-card>
                                     </el-col>
 
@@ -138,6 +123,25 @@
                 </el-col>
             </el-row>
         </el-form>
+
+
+        <el-dialog :title="$t('form.cancel_order')" :visible.sync="dialogCancelVisible">
+            <div v-loading="orderCancelling" class="form-container">
+                <el-form ref="cancelOrderForm" :model="cancelOrder" label-position="left" label-width="150px" style="max-width: 500px;">
+                    <el-form-item :label="$t('form.type_reason')" :error="this.errors.reason[0]" required>
+                        <el-input v-model="cancelOrder.reason" type="textarea"/>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogCancelVisible = false">
+                        {{ $t('form.close') }}
+                    </el-button>
+                    <el-button type="danger" @click="cancelOrder()">
+                        {{ $t('form.confirm') }}
+                    </el-button>
+                </div>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -154,6 +158,15 @@
     const serviceResource = new ServiceResource();
     const userResource = new UserResource();
     const variables = new Variables();
+
+    const statusMap = {
+        new: 'primary',
+        is_pending: 'info',
+        in_progress: 'progress',
+        done_by_master: 'success',
+        checking_by_manager: 'warning',
+        completed: 'success',
+    };
 
     export default {
         name: 'OrderDetail',
@@ -178,6 +191,11 @@
                 },
             },
         },
+        filters: {
+            statusFilter(status) {
+                return statusMap[status];
+            },
+        },
         data() {
             return {
                 activeTab: 'first',
@@ -188,6 +206,10 @@
                 mastersList: [],
                 errors: {},
                 masterAvatar: variables.getDefaultUserAvatar(),
+                dialogCancelVisible: false,
+                orderCancelling: false,
+                cancelOrder: {},
+                statusMapList: statusMap,
             };
         },
         watch: {
@@ -216,7 +238,7 @@
                         this.setDefaultErrors();
 
                         this.$message({
-                            message: 'Order information has been updated successfully',
+                            message: this.$t('order.saved'),
                             type: 'success',
                             duration: 5 * 1000,
                         });
@@ -241,6 +263,16 @@
                     }
                 });
             },
+            handleCancelling() {
+                // this.resetCancelOrder();
+                this.dialogCancelVisible = true;
+                this.$nextTick(() => {
+                    this.$refs['cancelOrderForm'].clearValidate();
+                });
+            },
+            handleSelectStatus(status) {
+                this.order.status = status;
+            },
             setDefaultErrors() {
                 this.errors = {
                     phone_number: '',
@@ -249,6 +281,7 @@
                     address: '',
                     comment: '',
                     master: '',
+                    reason: '',
                 };
             },
             setErrors(errors) {
@@ -278,33 +311,18 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
     @import "~@/styles/mixin.scss";
 
-    .createPost-container {
-        position: relative;
-
-        .createPost-main-container {
-            padding: 0 45px 20px 50px;
-
-            .postInfo-container {
-                position: relative;
-                @include clearfix;
-                margin-bottom: 10px;
-
-                .postInfo-container-item {
-                    float: left;
-                }
-            }
-        }
-
-        .word-counter {
-            width: 40px;
-            position: absolute;
-            right: -10px;
-            top: 0px;
-        }
+    .status-item {
+        margin-bottom: 10px;
     }
-</style>
-<style>
-    .createPost-container label.el-form-item__label {
-        text-align: left;
+
+    .status-wrap {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        display: inline-block;
+        font-size: 14px;
+        color: #606266;
+        line-height: 40px;
+        margin-bottom: 20px;
+        font-weight: 500;
     }
 </style>

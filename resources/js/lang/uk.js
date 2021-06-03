@@ -254,12 +254,18 @@ export default {
             edit: 'Редагування',
             timeline: 'Часова шкала',
         },
+        cancel_order: 'Скасувати замовлення',
+        status: 'Статус',
+        close: 'Закрити',
+        confirm: 'Підтвердити',
+        type_reason: 'Вкажіть причину',
     },
     order: {
         tabs: {
             edit: 'Редагування',
             timeline: 'Часова шкала',
         },
+        saved: 'Замовлення успішно збережено'
     },
     notifications: {
         changed_language: 'Мову успішно змінено'

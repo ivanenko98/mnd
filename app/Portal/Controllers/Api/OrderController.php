@@ -111,6 +111,7 @@ class OrderController extends BaseController
             'master_id' => $request->master,
             'address' => $request->address,
             'comment' => $request->comment,
+            'status' => $request->status,
         ]);
 
         $order->services()->sync($this->parseServices($request->services));
