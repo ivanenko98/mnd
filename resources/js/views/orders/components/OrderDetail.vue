@@ -7,7 +7,7 @@
                         <el-tabs v-model="activeTab">
                             <el-tab-pane v-loading="updating" :label="$t('order.tabs.edit')" name="first">
                                 <el-row>
-                                    <el-col :span="18">
+                                    <el-col :span="17">
                                         <el-card>
                                             <el-form-item :label="$t('form.phone_number')"
                                                           :error="this.errors.phone_number[0]" required>
@@ -42,13 +42,10 @@
                                             <el-form-item :label="$t('form.comment')" :error="this.errors.comment[0]">
                                                 <el-input v-model="order.comment" type="textarea"/>
                                             </el-form-item>
-                                            <el-button type="primary" @click="onSubmit">
-                                                {{$t('form.save')}}
-                                            </el-button>
                                         </el-card>
                                     </el-col>
 
-                                    <el-col :span="5" :offset="1">
+                                    <el-col :span="6" :offset="1">
                                         <el-card>
                                             <div class="status-wrap">
                                                 {{$t('form.status')+': '}}
@@ -78,9 +75,15 @@
                                                 </el-select>
                                             </el-form-item>
 
-                                            <el-button v-if="order.status !== 'cancelled'" type="danger" @click="handleCancelling()">
-                                                {{$t('form.cancel_order')}}
-                                            </el-button>
+                                            <div class="buttons">
+                                                <el-button type="primary" @click="onSubmit" size="medium">
+                                                    {{$t('form.save')}}
+                                                </el-button>
+                                                <el-button v-if="order.status !== 'cancelled'" type="danger" @click="handleCancelling()" size="medium">
+                                                    {{$t('form.cancel_order')}}
+                                                </el-button>
+                                            </div>
+
                                         </el-card>
                                     </el-col>
 
@@ -324,5 +327,11 @@
         line-height: 40px;
         margin-bottom: 20px;
         font-weight: 500;
+    }
+
+    .buttons {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
     }
 </style>

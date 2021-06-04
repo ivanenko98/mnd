@@ -29,9 +29,16 @@ class RolesTableSeeder extends Seeder
         // Setup basic permission
         $adminRole->givePermissionTo(Acl::permissions());
 
-        $managerRole->givePermissionTo(Acl::permissions([Acl::PERMISSION_PERMISSION_MANAGE, Acl::PERMISSION_MANAGERS_MANAGE]));
+        $managerRole->givePermissionTo(Acl::permissions([
+            Acl::PERMISSION_PERMISSION_MANAGE,
+            Acl::PERMISSION_MANAGERS_MANAGE
+        ]));
 
         $masterRole->givePermissionTo(Acl::menuPermissions());
-        $masterRole->givePermissionTo(Acl::PERMISSION_ARTICLE_MANAGE);
+        $masterRole->givePermissionTo([
+            Acl::PERMISSION_ARTICLE_MANAGE,
+            Acl::PERMISSION_SKILLS_LIST,
+            Acl::PERMISSION_CITIES_LIST
+        ]);
     }
 }

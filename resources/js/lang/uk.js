@@ -254,7 +254,7 @@ export default {
             edit: 'Редагування',
             timeline: 'Часова шкала',
         },
-        cancel_order: 'Скасувати замовлення',
+        cancel_order: 'Скасувати',
         status: 'Статус',
         close: 'Закрити',
         confirm: 'Підтвердити',

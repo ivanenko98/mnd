@@ -6,6 +6,7 @@ use AdminsTableSeeder;
 use CitiesTableSeeder;
 use Illuminate\Database\Seeder;
 use ManagersTableSeeder;
+use MastersTableSeeder;
 use OrdersTableSeeder;
 use RolesTableSeeder;
 use ServicesTableSeeder;
@@ -25,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesTableSeeder::class);
         $this->call(AdminsTableSeeder::class);
         $this->call(ManagersTableSeeder::class);
+        $this->call(MastersTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(CitiesTableSeeder::class);
         $this->call(OrdersTableSeeder::class);
