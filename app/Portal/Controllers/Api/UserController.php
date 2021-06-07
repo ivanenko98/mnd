@@ -101,9 +101,10 @@ class UserController extends BaseController
      * Display the specified resource.
      *
      * @param User $user
+     * @param UserRequest $request
      * @return MasterResource|UserResource
      */
-    public function show(User $user)
+    public function show(User $user, UserRequest $request)
     {
         if ($user->hasRole('master')) {
             return new MasterResource($user);

@@ -72,6 +72,7 @@ export default {
         orders: 'Замовлення',
         userProfile: 'Профиль пользователя',
         edit_order: 'Редагування Замовлення',
+        profile: 'Профіль',
     },
     navbar: {
         logOut: 'Выход',

@@ -37,7 +37,8 @@ Route::namespace('Api')->group(function () {
 
         // Users
         Route::get('users/masters', 'UserController@listMasters');
-        Route::apiResource('users', 'UserController')->middleware('permission:' . Acl::PERMISSION_USER_MANAGE);
+        Route::apiResource('users', 'UserController')->except(['show', 'update'])->middleware('permission:' . Acl::PERMISSION_USER_MANAGE);
+        Route::get('users/{user}', 'UserController@show');
         Route::post('users/{user}/upload-avatar', 'UserController@uploadAvatar');
         Route::post('users/set-lang', 'UserController@setLanguage');
 

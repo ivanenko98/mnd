@@ -24,9 +24,8 @@ class UserRequest extends BaseRequest
         $currentUser = Auth::user();
 
         if (
-            ($user->hasRole(['admin'])) ||
-            ($user->hasRole(['master']) && !$currentUser->hasPermission(Acl::PERMISSION_MASTERS_MANAGE)) ||
-            ($user->hasRole(['manager']) && !$currentUser->hasPermission(Acl::PERMISSION_MANAGERS_MANAGE))
+            ($currentUser->hasRole(['master']) && $user->id !== $currentUser->id) ||
+            ($currentUser->hasRole(['manager']) && !$currentUser->hasPermission(Acl::PERMISSION_MASTERS_MANAGE))
         ) {
             return false;
         }

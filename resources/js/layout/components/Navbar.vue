@@ -13,7 +13,7 @@
 
                 <lang-select class="right-menu-item hover-effect"/>
 
-                <div class="right-menu-item hover-effect" @click="logout">{{ $t('navbar.logOut') }}</div>
+                <div v-role="['master']" class="right-menu-item hover-effect" @click="logout">{{ $t('navbar.logOut') }}</div>
             </template>
 
             <el-dropdown v-role="['admin', 'manager']" class="avatar-container right-menu-item hover-effect"
@@ -28,7 +28,7 @@
                             {{ $t('navbar.dashboard') }}
                         </el-dropdown-item>
                     </router-link>
-                    <router-link v-show="userId !== null" :to="`/profile/edit`">
+                    <router-link v-show="userId !== null" :to="`/profile`">
                         <el-dropdown-item>
                             {{ $t('navbar.profile') }}
                         </el-dropdown-item>

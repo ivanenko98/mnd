@@ -12,7 +12,7 @@ const usersRoutes = {
             path: 'edit/:id(\\d+)',
             component: () => import('@/views/users/UserProfile'),
             name: 'UserProfile',
-            meta: {title: 'userProfile', noCache: true, permissions: ['manage user']},
+            meta: {title: 'userProfile', noCache: true},
             hidden: true,
         },
         {

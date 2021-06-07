@@ -81,62 +81,93 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/401'),
     hidden: true,
   },
-  {
-    path: '',
-    component: Layout,
-    redirect: 'dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'dashboard', noCache: false },
-      },
-    ],
-  },
-  {
-    path: '/documentation',
-    component: Layout,
-    redirect: '/documentation/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'documentation', icon: 'documentation', noCache: true },
-      },
-    ],
-  },
-  {
-    path: '/profile',
-    component: Layout,
-    redirect: '/profile/edit',
-    children: [
-      {
-        path: 'edit',
-        component: () => import('@/views/users/SelfProfile'),
-        name: 'SelfProfile',
-        meta: { title: 'userProfile', icon: 'user', noCache: true },
-      },
-    ],
-  },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: 'guide', icon: 'guide', noCache: true },
-      },
-    ],
-  },
-  elementUiRoutes,
+
+    // {
+    //     path: 'profile',
+    //     component: Layout,
+    //     redirect: 'profile',
+    //     hidden: true,
+    //     meta: { title: 'profile', icon: 'user', noCache: true, roles: ['manager', 'admin'] },
+    //     children: [
+    //         {
+    //             path: '/profile',
+    //             component: () => import('@/views/users/SelfProfile'),
+    //             name: 'SelfProfile',
+    //             meta: { title: 'profile', icon: 'user', noCache: true, roles: ['manager', 'admin'] },
+    //         },
+    //     ],
+    // },
+  // {
+  //   path: '/documentation',
+  //   component: Layout,
+  //   redirect: '/documentation/index',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/documentation/index'),
+  //       name: 'Documentation',
+  //       meta: { title: 'documentation', icon: 'documentation', noCache: true },
+  //     },
+  //   ],
+  // },
+  // {
+  //   path: '/guide',
+  //   component: Layout,
+  //   redirect: '/guide/index',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/guide/index'),
+  //       name: 'Guide',
+  //       meta: { title: 'guide', icon: 'guide', noCache: true },
+  //     },
+  //   ],
+  // },
 ];
 
 export const asyncRoutes = [
+    {
+        path: '',
+        component: Layout,
+        redirect: 'dashboard',
+        children: [
+            {
+                path: 'dashboard',
+                component: () => import('@/views/dashboard/index'),
+                name: 'Dashboard',
+                meta: { title: 'dashboard', icon: 'dashboard', noCache: false },
+            },
+        ],
+    },
+    {
+        path: 'profile',
+        component: Layout,
+        redirect: 'profile',
+        meta: { roles: ['master'] },
+        children: [
+            {
+                path: '/profile',
+                component: () => import('@/views/users/SelfProfile'),
+                name: 'SelfProfile',
+                meta: { title: 'profile', icon: 'user', noCache: true, roles: ['master'] },
+            },
+        ],
+    },
+    {
+        path: 'profile',
+        component: Layout,
+        redirect: 'profile',
+        meta: { roles: ['manager', 'admin'] },
+        hidden: true,
+        children: [
+            {
+                path: '/profile',
+                component: () => import('@/views/users/SelfProfile'),
+                name: 'SelfProfile',
+                meta: { title: 'profile', icon: 'user', noCache: true, roles: ['manager', 'admin'] },
+            },
+        ],
+    },
     usersRoutes,
     ordersRoutes,
     permissionRoutes,
@@ -145,6 +176,7 @@ export const asyncRoutes = [
     nestedRoutes,
     tableRoutes,
     adminRoutes,
+    elementUiRoutes,
   {
     path: '/theme',
     component: Layout,

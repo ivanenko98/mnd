@@ -3,7 +3,9 @@
     <el-form v-if="user" :model="user">
       <el-row :gutter="20">
         <el-col>
-          <user-activity :user="user" />
+            <el-card>
+                <user-edit :user="user" />
+            </el-card>
         </el-col>
       </el-row>
     </el-form>
@@ -11,13 +13,13 @@
 </template>
 
 <script>
-import UserBio from './components/UserBio';
+import UserEdit from './components/UserEdit';
 import UserCard from './components/UserCard';
 import UserActivity from './components/UserActivity';
 
 export default {
   name: 'SelfProfile',
-  components: { UserBio, UserCard, UserActivity },
+  components: { UserEdit, UserCard, UserActivity },
   data() {
     return {
       user: {},
