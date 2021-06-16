@@ -113,6 +113,17 @@ class UserController extends BaseController
         }
     }
 
+    public function showCurrentUser(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user->hasRole('master')) {
+            return new MasterResource($user);
+        } else {
+            return new UserResource($user);
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *

@@ -5,7 +5,8 @@ import Layout from "@/layout/index";
 const ordersRoutes = {
     path: '/orders',
     component: Layout,
-    redirect: 'orders',
+    redirect: '/orders/index',
+    meta: {title: 'orders', icon: 'component', permissions: ['manage orders']},
     children: [
         /** Order's management */
         {
@@ -16,7 +17,7 @@ const ordersRoutes = {
             hidden: true,
         },
         {
-            path: '',
+            path: 'index',
             component: () => import('@/views/orders/List'),
             name: 'Orders',
             meta: {title: 'orders', icon: 'component', permissions: ['manage orders']},

@@ -26,9 +26,7 @@ Route::namespace('Api')->group(function () {
         Route::get('auth/user', 'AuthController@user');
         Route::post('auth/logout', 'AuthController@logout');
 
-        Route::get('/user', function (Request $request) {
-            return new UserResource($request->user());
-        });
+
 
         // Skills
         Route::group(['prefix' => 'skills'], function () {
@@ -36,6 +34,7 @@ Route::namespace('Api')->group(function () {
         });
 
         // Users
+        Route::get('/user', 'UserController@showCurrentUser');
         Route::get('users/masters', 'UserController@listMasters');
         Route::apiResource('users', 'UserController')->except(['show', 'update'])->middleware('permission:' . Acl::PERMISSION_USER_MANAGE);
         Route::get('users/{user}', 'UserController@show');

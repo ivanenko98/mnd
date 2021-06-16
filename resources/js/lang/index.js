@@ -39,11 +39,11 @@ export function getLanguage() {
       return locale;
     }
   }
-  return 'en';
+  return 'uk';
 }
 const i18n = new VueI18n({
   // set locale
-  // options: en | ru | vi | zh
+  // options: en | ru | uk
   locale: getLanguage(),
   // set locale messages
   messages,

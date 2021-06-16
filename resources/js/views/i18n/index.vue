@@ -6,18 +6,16 @@
         <span style="margin-left:10px;">{{ $t('i18nView.title') }}</span>
       </div>
       <div>
+          {{ $store.state.app.language}}
         <el-radio-group v-model="lang" size="small">
-          <el-radio label="vi" border>
-            Tiếng Việt
-          </el-radio>
           <el-radio label="en" border>
             English
           </el-radio>
           <el-radio label="ru" border>
             Русский
           </el-radio>
-          <el-radio label="zh" border>
-            简体中文
+          <el-radio label="uk" border>
+            Укр
           </el-radio>
         </el-radio-group>
         <el-tag style="margin-top:15px;display:block;" type="info">
@@ -111,7 +109,7 @@ export default {
   computed: {
     lang: {
       get() {
-        return this.$store.state.app.language;
+        return 'uk';
       },
       set(lang) {
         this.$i18n.locale = lang;
@@ -128,8 +126,8 @@ export default {
     if (!this.$i18n.getLocaleMessage('en')[viewName]) {
       this.$i18n.mergeLocaleMessage('en', local.en);
       this.$i18n.mergeLocaleMessage('ru', local.ru);
-      this.$i18n.mergeLocaleMessage('zh', local.zh);
-      this.$i18n.mergeLocaleMessage('vi', local.vi);
+      this.$i18n.mergeLocaleMessage('uk', local.uk);
+      // this.$i18n.mergeLocaleMessage('vi', local.vi);
     }
     this.setOptions(); // set default select options
   },

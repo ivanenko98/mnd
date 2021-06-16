@@ -5,7 +5,11 @@ import Layout from "@/layout/index";
 const usersRoutes = {
     path: '/users',
     component: Layout,
-    redirect: 'users',
+    redirect: '/users/index',
+    meta: {
+        title: 'permission',
+        permissions: ['manage user']
+    },
     children: [
         /** User managements */
         {
@@ -16,7 +20,7 @@ const usersRoutes = {
             hidden: true,
         },
         {
-            path: '',
+            path: 'index',
             component: () => import('@/views/users/List'),
             name: 'UserList',
             meta: {title: 'users', icon: 'user', permissions: ['manage user']},

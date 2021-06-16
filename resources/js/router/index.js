@@ -194,13 +194,12 @@ export const asyncRoutes = [
     path: '/clipboard',
     component: Layout,
     redirect: 'noredirect',
-    meta: { permissions: ['view menu clipboard'] },
     children: [
       {
         path: 'index',
         component: () => import('@/views/clipboard/index'),
         name: 'ClipboardDemo',
-        meta: { title: 'clipboardDemo', icon: 'clipboard', roles: ['admin', 'manager', 'editor', 'user'] },
+        meta: { title: 'clipboardDemo', icon: 'clipboard'},
       },
     ],
   },
@@ -253,17 +252,17 @@ export const asyncRoutes = [
       },
     ],
   },
-  {
-    path: '/external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://github.com/tuandm/laravue',
-        meta: { title: 'externalLink', icon: 'link' },
-      },
-    ],
-  },
-  { path: '*', redirect: '/404', hidden: true },
+  // {
+  //   path: '/external-link',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'https://github.com/tuandm/laravue',
+  //       meta: { title: 'externalLink', icon: 'link' },
+  //     },
+  //   ],
+  // },
+  // { path: '*', redirect: '/404', hidden: true },
 ];
 
 const createRouter = () => new Router({
