@@ -260,6 +260,7 @@ export default {
         close: 'Закрити',
         confirm: 'Підтвердити',
         type_reason: 'Вкажіть причину',
+        sum_order: 'Сумма',
     },
     order: {
         tabs: {

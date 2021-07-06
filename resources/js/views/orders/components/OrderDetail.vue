@@ -50,7 +50,7 @@
                                             <div class="status-wrap">
                                                 {{$t('form.status')+': '}}
                                                 <el-dropdown @command="handleSelectStatus">
-                                                    <el-tag :type="order.status | statusFilter">
+                                                    <el-tag class="pointer" :type="order.status | statusFilter">
                                                         {{ $t('table.status_'+order.status) }}
                                                     </el-tag>
                                                     <el-dropdown-menu slot="dropdown">
@@ -59,6 +59,9 @@
                                                         </el-dropdown-item>
                                                     </el-dropdown-menu>
                                                 </el-dropdown>
+                                            </div>
+                                            <div class="item-line">
+                                                {{$t('form.sum_order')+': '}} <span class="pointer" @click="handleSum()">{{ order.total_cost !== null ? order.total_cost : '-' }} <svg-icon icon-class="edit" /></span>
                                             </div>
                                             <div class="box-center">
                                                 <pan-thumb :image="masterAvatar" :height="'100px'"
@@ -145,6 +148,27 @@
                 </div>
             </div>
         </el-dialog>
+
+        <el-dialog :title="$t('form.sum_order')" :visible.sync="dialogSumChangeVisible">
+            <div v-loading="sumChangeCancelling" class="form-container">
+                <el-form ref="cancelOrderForm" label-position="left" label-width="150px" style="max-width: 500px;">
+                    <el-form-item :label="$t('form.sum_order')" required>
+                        <el-input v-model="order.total_cost" type="number">
+                            <template slot="append">грн</template>
+                        </el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogCancelVisible = false">
+                        {{ $t('form.close') }}
+                    </el-button>
+<!--                    <el-button type="danger" @click="changeOrderSum()">-->
+<!--                        {{ $t('form.save') }}-->
+<!--                    </el-button>-->
+                </div>
+            </div>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -211,7 +235,10 @@
                 masterAvatar: variables.getDefaultUserAvatar(),
                 dialogCancelVisible: false,
                 orderCancelling: false,
+                dialogSumChangeVisible: false,
+                sumChangeCancelling: false,
                 cancelOrder: {},
+                sum_order: 0,
                 statusMapList: statusMap,
             };
         },
@@ -276,6 +303,13 @@
             handleSelectStatus(status) {
                 this.order.status = status;
             },
+            handleSum() {
+                // this.resetCancelOrder();
+                this.dialogSumChangeVisible = true;
+                this.$nextTick(() => {
+                    this.$refs['sumOrderForm'].clearValidate();
+                });
+            },
             setDefaultErrors() {
                 this.errors = {
                     phone_number: '',
@@ -316,6 +350,17 @@
 
     .status-item {
         margin-bottom: 10px;
+    }
+
+    .item-line {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        display: inline-block;
+        font-size: 14px;
+        color: #606266;
+        line-height: 40px;
+        margin-bottom: 20px;
+        font-weight: 500;
     }
 
     .status-wrap {
