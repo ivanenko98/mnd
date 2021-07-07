@@ -49,7 +49,10 @@
                                         <el-card>
                                             <div class="status-wrap">
                                                 {{$t('form.status')+': '}}
-                                                <el-dropdown @command="handleSelectStatus">
+                                                <el-tag v-if="order.status == 'cancelled'" class="pointer" type="danger">
+                                                    {{ $t('table.status_'+order.status) }}
+                                                </el-tag>
+                                                <el-dropdown v-else @command="handleSelectStatus" trigger="click">
                                                     <el-tag class="pointer" :type="order.status | statusFilter">
                                                         {{ $t('table.status_'+order.status) }}
                                                     </el-tag>
@@ -60,8 +63,11 @@
                                                     </el-dropdown-menu>
                                                 </el-dropdown>
                                             </div>
+                                            <div v-if="order.status == 'cancelled'" class="item-line danger-text">
+                                                {{ order.cancel_reason }}
+                                            </div>
                                             <div class="item-line">
-                                                {{$t('form.sum_order')+': '}} <span class="pointer" @click="handleSum()">{{ order.total_cost !== null ? order.total_cost : '-' }} <svg-icon icon-class="edit" /></span>
+                                                {{ $t('form.sum_order')+': '}} <span class="pointer" @click="handleSum()">{{ order.total_cost !== null ? order.total_cost : 0 }} {{ $t('form.currency')}}   <svg-icon icon-class="edit" /></span>
                                             </div>
                                             <div class="box-center">
                                                 <pan-thumb :image="masterAvatar" :height="'100px'"
@@ -135,36 +141,36 @@
             <div v-loading="orderCancelling" class="form-container">
                 <el-form ref="cancelOrderForm" :model="cancelOrder" label-position="left" label-width="150px" style="max-width: 500px;">
                     <el-form-item :label="$t('form.type_reason')" :error="this.errors.reason[0]" required>
-                        <el-input v-model="cancelOrder.reason" type="textarea"/>
+                        <el-input v-model="cancelOrder.cancel_reason" type="textarea"/>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogCancelVisible = false">
                         {{ $t('form.close') }}
                     </el-button>
-                    <el-button type="danger" @click="cancelOrder()">
+                    <el-button type="danger" @click="cancelingOrder()">
                         {{ $t('form.confirm') }}
                     </el-button>
                 </div>
             </div>
         </el-dialog>
 
-        <el-dialog :title="$t('form.sum_order')" :visible.sync="dialogSumChangeVisible">
+        <el-dialog :title="$t('form.set_sum_order')" :visible.sync="dialogSumChangeVisible">
             <div v-loading="sumChangeCancelling" class="form-container">
-                <el-form ref="cancelOrderForm" label-position="left" label-width="150px" style="max-width: 500px;">
+                <el-form ref="sumOrderForm" label-position="left" label-width="150px" style="max-width: 500px;">
                     <el-form-item :label="$t('form.sum_order')" required>
-                        <el-input v-model="order.total_cost" type="number">
+                        <el-input v-model="total_cost" type="number">
                             <template slot="append">грн</template>
                         </el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogCancelVisible = false">
+                    <el-button @click="dialogSumChangeVisible = false">
                         {{ $t('form.close') }}
                     </el-button>
-<!--                    <el-button type="danger" @click="changeOrderSum()">-->
-<!--                        {{ $t('form.save') }}-->
-<!--                    </el-button>-->
+                    <el-button type="primary" @click="setOrderSum()">
+                        {{ $t('form.save') }}
+                    </el-button>
                 </div>
             </div>
         </el-dialog>
@@ -238,7 +244,7 @@
                 dialogSumChangeVisible: false,
                 sumChangeCancelling: false,
                 cancelOrder: {},
-                sum_order: 0,
+                total_cost: 0,
                 statusMapList: statusMap,
             };
         },
@@ -247,6 +253,8 @@
                 if (newOrder.master !== null) {
                     this.masterAvatar = newOrder.master_avatar;
                 }
+
+                this.total_cost = newOrder.total_cost;
             }
         },
         created() {
@@ -304,11 +312,47 @@
                 this.order.status = status;
             },
             handleSum() {
-                // this.resetCancelOrder();
+                this.total_cost = this.order.total_cost;
                 this.dialogSumChangeVisible = true;
                 this.$nextTick(() => {
                     this.$refs['sumOrderForm'].clearValidate();
                 });
+            },
+            setOrderSum() {
+                if ((this.total_cost.length === undefined || this.total_cost.length > 0) && this.total_cost >= 0) {
+                    this.order.total_cost = this.total_cost;
+                    this.dialogSumChangeVisible = false
+                } else {
+                    this.$message({
+                        message: this.$t('form.incorrect_data'),
+                        type: 'error',
+                        duration: 5 * 1000,
+                    });
+                }
+            },
+            cancelingOrder() {
+                this.updating = true;
+                orderResource
+                    .cancel(this.order.id, this.cancelOrder)
+                    .then(response => {
+                        this.updating = false;
+
+                        this.$message({
+                            message: this.$t('order.succefully_cancelled'),
+                            type: 'success',
+                            duration: 5 * 1000,
+                        });
+
+                        this.order.status = response.data.status;
+
+                        this.dialogCancelVisible = false;
+                    })
+                    .catch(error => {
+                        // this.setErrors(error.response.data.data);
+                    })
+                    .finally(() => {
+                        this.updating = false;
+                    });
             },
             setDefaultErrors() {
                 this.errors = {
@@ -355,12 +399,16 @@
     .item-line {
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        display: inline-block;
+        display: block;
         font-size: 14px;
         color: #606266;
-        line-height: 40px;
         margin-bottom: 20px;
         font-weight: 500;
+    }
+
+    .danger-text {
+        color: #ff4949c9;
+        font-size: 11px;
     }
 
     .status-wrap {
@@ -370,7 +418,7 @@
         font-size: 14px;
         color: #606266;
         line-height: 40px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         font-weight: 500;
     }
 

@@ -11,6 +11,8 @@ class Order extends Model
 {
     use HasFactory;
 
+    const CANCELLED = 'cancelled';
+
     protected $guarded = [];
 
     public function master()

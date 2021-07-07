@@ -261,6 +261,10 @@ export default {
         confirm: 'Підтвердити',
         type_reason: 'Вкажіть причину',
         sum_order: 'Сумма',
+        set_sum_order: 'Вкажіть суму замовлення',
+        currency: 'грн',
+        incorrect_data: 'Некоректні дані',
+        succefully_cancelled: 'Замовлення відмінено',
     },
     order: {
         tabs: {

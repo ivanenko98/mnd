@@ -43,6 +43,7 @@ Route::namespace('Api')->group(function () {
 
         // Orders
         Route::apiResource('orders', 'OrderController')->middleware('permission:' . Acl::PERMISSION_ORDERS_MANAGE);
+        Route::post('orders/{order}/cancel', 'OrderController@cancel');
 
         // Services
         Route::group(['prefix' => 'services'], function () {

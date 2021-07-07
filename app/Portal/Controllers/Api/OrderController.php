@@ -13,6 +13,7 @@ use App\Portal\Models\Order;
 use App\Portal\Models\Permission;
 use App\Portal\Models\Role;
 use App\Portal\Models\User;
+use App\Portal\Order\Requests\CancelRequest;
 use App\Portal\Order\Requests\CreateRequest;
 use App\Portal\Order\Requests\UpdateRequest;
 use App\Portal\User\Requests\UploadAvatarRequest;
@@ -112,9 +113,21 @@ class OrderController extends BaseController
             'address' => $request->address,
             'comment' => $request->comment,
             'status' => $request->status,
+            'total_cost' => $request->total_cost,
         ]);
 
         $order->services()->sync($this->parseServices($request->services));
+
+        $response = $this->formatResponse('success', null, new OrderResource($order));
+        return response($response, 200);
+    }
+
+    public function cancel(CancelRequest $request, Order $order)
+    {
+        $order->update([
+            'cancel_reason' => $request->cancel_reason,
+            'status' => Order::CANCELLED,
+        ]);
 
         $response = $this->formatResponse('success', null, new OrderResource($order));
         return response($response, 200);
