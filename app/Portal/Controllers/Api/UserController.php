@@ -139,6 +139,7 @@ class UserController extends BaseController
             'email' => $request->email,
             'date_of_birth' => Carbon::parse($request->date_of_birth)->format('Y-m-d'),
             'about' => $request->about,
+            'avatar' => $request->avatar,
         ]);
 
         if ($user->hasRole('master')) {
