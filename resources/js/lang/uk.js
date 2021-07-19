@@ -81,6 +81,7 @@ export default {
         theme: 'Тема',
         size: 'Размер интерфейса',
         profile: 'Профіль',
+        balance: 'Баланс',
     },
     login: {
         title: 'Авторизація',

@@ -7,7 +7,11 @@
 
         <div class="right-menu">
             <template v-if="device!=='mobile'">
-                <search id="header-search" class="right-menu-item"/>
+                <router-link v-role="['master']" :to="`/profile`">
+                    <div class="right-menu-item hover-effect">{{ $t('navbar.balance')+': ' }}0 грн</div>
+                </router-link>
+
+<!--                <search id="header-search" class="right-menu-item"/>-->
 
                 <screenfull id="screenfull" class="right-menu-item hover-effect"/>
 
