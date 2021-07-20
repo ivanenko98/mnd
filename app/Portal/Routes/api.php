@@ -42,8 +42,14 @@ Route::namespace('Api')->group(function () {
         Route::post('users/set-lang', 'UserController@setLanguage');
 
         // Orders
-        Route::apiResource('orders', 'OrderController')->middleware('permission:' . Acl::PERMISSION_ORDERS_MANAGE);
-        Route::post('orders/{order}/cancel', 'OrderController@cancel');
+
+        Route::group(['prefix' => 'orders'], function () {
+            Route::get('/', 'OrderController@index')->middleware('permission:' . Acl::PERMISSION_ORDERS_MANAGE . '|' . Acl::PERMISSION_ORDERS_MANAGE_MY);
+            Route::post('/', 'OrderController@store')->middleware('permission:' . Acl::PERMISSION_ORDERS_MANAGE);
+            Route::put('/{order}', 'OrderController@update')->middleware('permission:' . Acl::PERMISSION_ORDERS_MANAGE);
+            Route::get('/{order}', 'OrderController@show')->middleware('permission:' . Acl::PERMISSION_ORDERS_MANAGE . '|' . Acl::PERMISSION_ORDERS_MANAGE_MY);
+            Route::post('/{order}/cancel', 'OrderController@cancel')->middleware('permission:' . Acl::PERMISSION_ORDERS_MANAGE);
+        });
 
         // Services
         Route::group(['prefix' => 'services'], function () {

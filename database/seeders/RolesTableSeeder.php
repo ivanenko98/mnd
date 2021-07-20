@@ -37,7 +37,8 @@ class RolesTableSeeder extends Seeder
         $masterRole->givePermissionTo([
             Acl::PERMISSION_ARTICLE_MANAGE,
             Acl::PERMISSION_SKILLS_LIST,
-            Acl::PERMISSION_CITIES_LIST
+            Acl::PERMISSION_CITIES_LIST,
+            Acl::PERMISSION_ORDERS_MANAGE_MY
         ]);
     }
 }

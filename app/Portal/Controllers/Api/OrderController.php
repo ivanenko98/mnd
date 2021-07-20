@@ -49,11 +49,16 @@ class OrderController extends BaseController
      */
     public function index(Request $request)
     {
+        $user = Auth::user();
         $searchParams = $request->all();
         $query = Order::query();
 
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
         $keyword = Arr::get($searchParams, 'keyword', '');
+
+        if ($user->hasRole('master')) {
+            $query->where('master_id', $user->id);
+        }
 
         if (!empty($keyword)) {
             $query->where('phone_number', 'LIKE', '%' . $keyword . '%');
@@ -93,7 +98,15 @@ class OrderController extends BaseController
      */
     public function show(Order $order)
     {
-        $response = $this->formatResponse('success', null, new OrderEditResource($order));
+        $user = Auth::user();
+
+        if ($user->hasRole('master')) {
+            $data = new OrderResource($order);
+        } else {
+            $data = new OrderEditResource($order);
+        }
+
+        $response = $this->formatResponse('success', null, $data);
         return response($response, 200);
     }
 

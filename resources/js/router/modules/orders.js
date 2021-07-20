@@ -6,7 +6,7 @@ const ordersRoutes = {
     path: '/orders',
     component: Layout,
     redirect: '/orders/index',
-    meta: {title: 'orders', icon: 'component', permissions: ['manage orders']},
+    meta: {title: 'orders', icon: 'component', permissions: ['manage orders', 'manage my orders']},
     children: [
         /** Order's management */
         {
@@ -20,7 +20,7 @@ const ordersRoutes = {
             path: 'index',
             component: () => import('@/views/orders/List'),
             name: 'Orders',
-            meta: {title: 'orders', icon: 'component', permissions: ['manage orders']},
+            meta: {title: 'orders', icon: 'component', permissions: ['manage orders', 'manage my orders']},
         },
     ],
 };

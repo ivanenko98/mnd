@@ -143,6 +143,7 @@ export default {
         status: 'Статус',
         actions: 'Дії',
         edit: 'Змінити',
+        show: 'Показати',
         publish: 'Опублікувати',
         draft: 'Чорновик',
         delete: 'Видалити',
@@ -171,6 +172,8 @@ export default {
         status_completed: 'Завершено',
         status_cancelled: 'Скасовано',
         order_created: 'Замовлення успішно створено',
+        order_info: 'Інформація про замовлення',
+        close: 'Закрити'
     },
     errorLog: {
         tips: 'Пожалуйста, нажмите на иконку "бага" в правом верхнем углу',
@@ -266,6 +269,9 @@ export default {
         currency: 'грн',
         incorrect_data: 'Некоректні дані',
         succefully_cancelled: 'Замовлення відмінено',
+        order_id: 'Ідентифікатор',
+        total_cost: 'Сума замовлення',
+        platform_fee: 'Комісія сервісу',
     },
     order: {
         tabs: {

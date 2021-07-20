@@ -6,7 +6,8 @@
             <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
                 {{ $t('table.search') }}
             </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus"
+            <el-button v-if="checkRole(['admin','manager'])" class="filter-item" style="margin-left: 10px;"
+                       type="primary" icon="el-icon-plus"
                        @click="handleCreate">
                 {{ $t('table.add') }}
             </el-button>
@@ -25,14 +26,17 @@
                 </template>
             </el-table-column>
 
-            <el-table-column width="120px" align="center" :label="$t('table.master')">
+            <el-table-column v-if="checkRole(['admin','manager'])" width="120px" align="center"
+                             :label="$t('table.master')">
                 <template slot-scope="scope">
-                    <router-link v-if="scope.row.master != null" :to="'/users/edit/'+scope.row.master.id" class="link-type">
+                    <router-link v-if="scope.row.master != null" :to="'/users/edit/'+scope.row.master.id"
+                                 class="link-type">
                         <span>{{ scope.row.master.first_name+' '+scope.row.master.last_name+' (#'+scope.row.master.id+')' }}</span>
                     </router-link>
                     <span v-else>{{ $t('table.master_is_searching') }}</span>
                 </template>
             </el-table-column>
+
 
             <el-table-column width="120px" align="center" :label="$t('table.city')">
                 <template slot-scope="scope">
@@ -63,11 +67,15 @@
 
             <el-table-column align="center" :label="$t('table.actions')" width="120">
                 <template slot-scope="scope">
-                    <router-link :to="'/orders/edit/'+scope.row.id">
+                    <router-link v-if="checkRole(['admin','manager'])" :to="'/orders/edit/'+scope.row.id">
                         <el-button type="primary" size="small" icon="el-icon-edit">
-                            Edit
+                            {{ $t('table.edit') }}
                         </el-button>
                     </router-link>
+                    <el-button v-if="checkRole(['master'])" type="primary" size="small" icon="el-icon-view"
+                               @click="handleShow(scope.row.id)">
+                        {{ $t('table.show') }}
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -77,7 +85,8 @@
 
         <el-dialog :title="$t('table.create_new_order')" :visible.sync="dialogFormVisible">
             <div v-loading="orderCreating" class="form-container">
-                <el-form ref="orderForm" :model="newOrder" label-position="left" label-width="150px" style="max-width: 500px;">
+                <el-form ref="orderForm" :model="newOrder" label-position="left" label-width="150px"
+                         style="max-width: 500px;">
                     <el-form-item :label="$t('form.phone_number')" :error="this.errors.phone_number[0]" required>
                         <el-input :placeholder="$t('form.phone_number_placeholder')" v-model="newOrder.phone_number">
                             <template slot="prepend">+380</template>
@@ -94,8 +103,9 @@
                         </div>
                     </el-form-item>
                     <el-form-item :label="$t('form.city')" :error="this.errors.city[0]" required>
-                        <el-select v-model="newOrder.city" class="filter-item" :placeholder="$t('form.select_city')" filterable clearable>
-                            <el-option v-for="city in cityList" :key="city.id" :label="city.title" :value="city.id" />
+                        <el-select v-model="newOrder.city" class="filter-item" :placeholder="$t('form.select_city')"
+                                   filterable clearable>
+                            <el-option v-for="city in cityList" :key="city.id" :label="city.title" :value="city.id"/>
                         </el-select>
                     </el-form-item>
                     <el-form-item :label="$t('form.address')" :error="this.errors.address[0]" required>
@@ -115,6 +125,24 @@
                 </div>
             </div>
         </el-dialog>
+
+        <el-dialog :title="$t('table.order_info')" :visible.sync="dialogOrderShowingVisible">
+            <div v-loading="orderShowing" class="form-container">
+
+                <p><span class="row-title">{{ $t('form.order_id') + ': ' }}</span>{{ order.id }}</p>
+                <p><span class="row-title">{{ $t('form.phone_number') + ': ' }}</span>{{ order.phone_number }}</p>
+                <p><span class="row-title">{{ $t('form.city') + ': ' }}</span>{{ order.city.title }}</p>
+                <p><span class="row-title">{{ $t('form.address') + ': ' }}</span>{{ order.address }}</p>
+                <p><span class="row-title">{{ $t('form.total_cost') + ': ' }}</span>{{ order.total_cost + ' грн' }}</p>
+                <p><span class="row-title">{{ $t('form.platform_fee') + ': ' }}</span>{{ order.platform_fee + ' грн' }}</p>
+
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogOrderShowingVisible = false">
+                        {{ $t('table.close') }}
+                    </el-button>
+                </div>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -123,7 +151,7 @@
     import Resource from '@/api/resource';
     import waves from '@/directive/waves';
     import permission from "@/directive/permission";
-    import role from "@/directive/role"; // Waves directive
+    import checkRole from "@/utils/role";
     import ElDragSelect from '@/components/DragSelect';
     import ServiceResource from '@/api/service';
     import CityResource from '@/api/city';
@@ -133,11 +161,10 @@
     const orderResource = new Resource('orders');
 
 
-
     export default {
         name: 'OrderList',
         components: {Pagination, ElDragSelect},
-        directives: { waves },
+        directives: {waves},
         filters: {
             statusFilter(status) {
                 const statusMap = {
@@ -162,8 +189,14 @@
                     limit: 20,
                 },
                 dialogFormVisible: false,
+                dialogOrderShowingVisible: false,
                 orderCreating: false,
+                orderShowing: false,
                 newOrder: {},
+                order: {
+                    city: {},
+                    master: {}
+                },
                 servicesList: [],
                 cityList: [],
                 errors: {},
@@ -176,6 +209,7 @@
             this.getListCities();
         },
         methods: {
+            checkRole,
             async getList() {
                 const {limit, page} = this.query;
                 this.listLoading = true;
@@ -197,6 +231,10 @@
                 this.$nextTick(() => {
                     this.$refs['orderForm'].clearValidate();
                 });
+            },
+            handleShow(id) {
+                this.getOrder(id);
+                this.dialogOrderShowingVisible = true;
             },
             resetNewOrder() {
                 this.newOrder = {
@@ -247,12 +285,16 @@
                 }
             },
             async getListServices() {
-                const { data } = await serviceResource.list({});
+                const {data} = await serviceResource.list({});
                 this.servicesList = data;
             },
             async getListCities() {
-                const { data } = await cityResource.list({});
+                const {data} = await cityResource.list({});
                 this.cityList = data;
+            },
+            async getOrder(id) {
+                const {data} = await orderResource.get(id);
+                this.order = data;
             },
         },
     };
@@ -267,5 +309,9 @@
         position: absolute;
         right: 15px;
         top: 10px;
+    }
+
+    .row-title {
+        font-weight: bold;
     }
 </style>
