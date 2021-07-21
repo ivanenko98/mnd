@@ -25,6 +25,7 @@ final class Acl
     const PERMISSION_SKILLS_LIST = 'skills list';
     const PERMISSION_SERVICES_LIST = 'services list';
     const PERMISSION_CITIES_LIST = 'cities list';
+    const PERMISSION_BALANCE_HISTORY_LIST = 'balance history';
 
     const PERMISSION_MASTERS_MANAGE = 'manage masters';
     const PERMISSION_MANAGERS_MANAGE = 'manage managers';

@@ -61,6 +61,11 @@ Route::namespace('Api')->group(function () {
             Route::get('/', 'CityController@index')->middleware('permission:' . Acl::PERMISSION_CITIES_LIST);
         });
 
+        // Balance History
+        Route::group(['prefix' => 'balance-history'], function () {
+            Route::get('/', 'BalanceHistoryController@index')->middleware('permission:' . Acl::PERMISSION_BALANCE_HISTORY_LIST);
+        });
+
         // Api resource routes
         Route::apiResource('roles', 'RoleController')->middleware('permission:' . Acl::PERMISSION_PERMISSION_MANAGE);
         Route::apiResource('permissions', 'PermissionController')->middleware('permission:' . Acl::PERMISSION_PERMISSION_MANAGE);

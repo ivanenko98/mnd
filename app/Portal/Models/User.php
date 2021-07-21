@@ -149,4 +149,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Setting::class, 'setting_user')->withPivot(['value']);
     }
+
+    public function balanceHistories()
+    {
+        return $this->hasMany(BalanceHistory::class);
+    }
 }

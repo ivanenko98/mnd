@@ -168,6 +168,20 @@ export const asyncRoutes = [
             },
         ],
     },
+    {
+        path: 'balance',
+        component: Layout,
+        redirect: 'balance',
+        meta: { roles: ['master'] },
+        children: [
+            {
+                path: '/balance',
+                component: () => import('@/views/balance/Index'),
+                name: 'Balance',
+                meta: { title: 'balance', icon: 'dollar', noCache: true, roles: ['master'] },
+            },
+        ],
+    },
     usersRoutes,
     ordersRoutes,
     permissionRoutes,

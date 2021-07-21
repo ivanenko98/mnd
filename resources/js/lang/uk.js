@@ -73,6 +73,7 @@ export default {
         userProfile: 'Профиль пользователя',
         edit_order: 'Редагування Замовлення',
         profile: 'Профіль',
+        balance: 'Баланс коштів',
     },
     navbar: {
         logOut: 'Вихід',
@@ -173,7 +174,9 @@ export default {
         status_cancelled: 'Скасовано',
         order_created: 'Замовлення успішно створено',
         order_info: 'Інформація про замовлення',
-        close: 'Закрити'
+        close: 'Закрити',
+        amount: 'Сума',
+        comment: 'Коментар'
     },
     errorLog: {
         tips: 'Пожалуйста, нажмите на иконку "бага" в правом верхнем углу',
@@ -282,6 +285,14 @@ export default {
     },
     notifications: {
         changed_language: 'Мову успішно змінено'
-    }
-
+    },
+    balance: {
+        tabs: {
+            refill_account: 'Поповнення рахунку',
+            history: 'Історія платежів',
+        },
+        refill: 'Поповнити',
+        type_refill_sum: 'Вкажіть сумму поповнення',
+        type_refill_sum_warning: 'Мінімальне поповнення - 20 грн.',
+    },
 };

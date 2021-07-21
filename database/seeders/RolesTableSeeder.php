@@ -38,6 +38,7 @@ class RolesTableSeeder extends Seeder
             Acl::PERMISSION_ARTICLE_MANAGE,
             Acl::PERMISSION_SKILLS_LIST,
             Acl::PERMISSION_CITIES_LIST,
+            Acl::PERMISSION_BALANCE_HISTORY_LIST,
             Acl::PERMISSION_ORDERS_MANAGE_MY
         ]);
     }
